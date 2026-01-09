@@ -1,4 +1,4 @@
-const CACHE_NAME = 'clarity-v13';
+const CACHE_NAME = 'clarity-v-final-ultra'; // Mudei o nome aqui para forçar o reset
 const ASSETS = [
   './',
   './index.html',
@@ -6,6 +6,7 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', e => {
+  self.skipWaiting(); // Força o novo Service Worker a assumir o controle na hora
   e.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
   );
