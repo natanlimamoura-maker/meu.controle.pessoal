@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CLARITY MASTER PRO</title>
+    <title>CLARITY MASTER PRO - V2</title>
     <link rel="manifest" href="./manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
@@ -19,20 +19,29 @@
 </head>
 <body>
 
-    <div id="tela-licenca" class="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center p-8 text-center hidden z-[300]">
-        <h2 class="text-2xl font-black mb-4">LICENÇA EXPIRADA</h2>
-        <input type="number" id="senha-licenca" placeholder="SENHA" class="bg-white/5 border border-white/10 p-4 rounded-2xl w-full max-w-xs text-center mb-4 text-white">
-        <button onclick="validarSenha()" class="bg-indigo-600 p-4 rounded-2xl w-full max-w-xs font-bold uppercase">RENOVAR</button>
+    <div id="tela-licenca" class="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center p-8 text-center hidden z-[500]">
+        <h2 class="text-2xl font-black mb-4">ACESSO EXPIRADO</h2>
+        <input type="number" id="senha-licenca" placeholder="SENHA DE RENOVAÇÃO" class="bg-white/5 border border-white/10 p-4 rounded-2xl w-full max-w-xs text-center mb-4 text-white">
+        <button onclick="validarSenha()" class="bg-indigo-600 p-4 rounded-2xl w-full max-w-xs font-bold uppercase">RENOVAR CICLO</button>
     </div>
 
-    <header class="p-8 pb-4 text-center border-b border-white/5 bg-gradient-to-b from-indigo-500/10 to-transparent relative">
+    <header class="p-8 pb-4 text-center border-b border-white/5 bg-gradient-to-b from-indigo-500/10 to-transparent relative uppercase">
         <button onclick="abrirConfig()" class="absolute top-6 right-6 text-2xl opacity-40 hover:opacity-100 transition-opacity p-2">⚙️</button>
         <p class="text-[10px] font-bold opacity-70 mb-1 italic" id="mes-atual">JANEIRO</p>
-        <p class="text-[9px] opacity-50 mb-1">VALOR EM CAIXA (ACUMULADO)</p>
+        <p class="text-[9px] opacity-50 mb-1">VALOR EM CAIXA ACUMULADO</p>
         <h1 id="saldo-geral" class="text-5xl font-black tracking-tighter">R$ 0,00</h1>
     </header>
 
     <main id="view-principal" class="p-6 space-y-8 max-w-lg mx-auto">
+        
+        <button onclick="abrirMentoria()" class="w-full bg-indigo-600 p-6 rounded-[35px] flex items-center justify-between shadow-xl shadow-indigo-600/30 active:scale-95 transition-all">
+            <div class="text-left">
+                <p class="text-[9px] font-black text-white/50 tracking-widest">ESTRATÉGIA</p>
+                <h2 class="text-lg font-black text-white italic">CENTRAL DO MESTRE 🧠</h2>
+            </div>
+            <span class="text-[10px] bg-white/20 px-3 py-1 rounded-full text-white font-bold">ABRIR</span>
+        </button>
+
         <div class="grid grid-cols-2 gap-4">
             <button onclick="abrirModal('receita')" class="bg-emerald-500/10 border border-emerald-500/20 p-6 rounded-[35px] text-emerald-500 font-black text-xs tracking-widest">+ GANHEI</button>
             <button onclick="abrirModal('gasto')" class="bg-rose-500/10 border border-rose-500/20 p-6 rounded-[35px] text-rose-400 font-black text-xs tracking-widest">- GASTEI</button>
@@ -40,48 +49,56 @@
 
         <section>
             <div class="flex justify-between items-center mb-4">
-                <h2 class="font-black text-xs opacity-70 italic tracking-widest">MEUS SONHOS</h2>
+                <h2 class="font-black text-xs opacity-70 italic tracking-widest">SONHOS</h2>
                 <button onclick="abrirModalObjetivo()" class="text-[10px] font-bold text-indigo-500">+ NOVO</button>
             </div>
             <div id="lista-objetivos" class="flex gap-4 overflow-x-auto hide-scroll pb-2"></div>
         </section>
 
         <section class="glass rounded-[40px] p-6 pb-20">
-            <h2 class="text-[10px] font-bold opacity-40 tracking-widest mb-6 text-center italic underline">LANÇAMENTOS DO MÊS</h2>
+            <h2 class="text-[10px] font-bold opacity-40 tracking-widest mb-6 text-center italic underline">EXTRATO (EDITÁVEL)</h2>
             <div id="extrato" class="space-y-5"></div>
         </section>
     </main>
 
     <main id="view-config" class="hidden p-8 space-y-8 max-w-lg mx-auto min-h-screen">
-        <button onclick="fecharAbas()" class="text-indigo-500 font-black text-xs mb-4 flex items-center gap-2">← VOLTAR AO INÍCIO</button>
+        <button onclick="fecharAbas()" class="text-indigo-500 font-black text-xs mb-4 flex items-center gap-2 uppercase">← VOLTAR AO INÍCIO</button>
         <h2 class="text-2xl font-black italic text-indigo-500">AJUSTES</h2>
-        <div class="glass p-6 rounded-[30px] space-y-4">
-            <p class="text-[10px] font-black opacity-60">NOME DO MESTRE</p>
+        
+        <div class="glass p-6 rounded-[30px] space-y-4 uppercase">
+            <p class="text-[10px] font-black opacity-60">NOME DO USUÁRIO</p>
             <input type="text" id="input-nome-user" onchange="salvarNome()" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none" placeholder="SEU NOME">
         </div>
-        <div class="glass p-6 rounded-[30px] flex justify-between items-center">
-            <p class="text-xs font-black opacity-60">MODO VISUAL</p>
-            <button onclick="toggleTema()" class="bg-indigo-600 px-4 py-2 rounded-xl text-[10px] font-bold">TROCAR TEMA</button>
-        </div>
+
         <div class="glass p-6 rounded-[30px] space-y-3">
-            <p class="text-[10px] font-black opacity-60 uppercase">DADOS</p>
+            <p class="text-[10px] font-black opacity-60">DADOS & LICENÇA</p>
+            <div class="p-4 bg-white/5 rounded-2xl text-[10px] font-bold text-indigo-400 uppercase" id="status-licenca-texto">RESTAM -- DIAS</div>
             <button onclick="exportarBackup()" class="w-full p-4 bg-white/5 rounded-2xl text-[10px] font-bold">COPIAR BACKUP</button>
             <button onclick="resetaTudo()" class="w-full p-4 bg-rose-900/20 rounded-2xl text-[10px] font-bold text-rose-500">RESETAR TUDO</button>
         </div>
+    </main>
+
+    <main id="view-mentoria" class="hidden p-8 space-y-6 max-w-lg mx-auto overflow-y-auto h-screen pb-40 hide-scroll uppercase">
+        <button onclick="fecharAbas()" class="text-indigo-500 font-black text-xs mb-4 flex items-center gap-2">← VOLTAR</button>
+        <h2 class="text-2xl font-black italic text-indigo-500">MANUAL DO MESTRE</h2>
+        <div class="space-y-4" id="cards-mentoria">
+            </div>
     </main>
 
     <div id="modal-transacao" class="fixed inset-0 bg-black/95 hidden flex items-center justify-center p-6 z-[400]">
         <div class="glass w-full max-w-sm p-8 rounded-[40px] space-y-6">
             <h3 id="modal-titulo" class="text-xl font-black text-center uppercase">REGISTRAR</h3>
             <input type="text" id="input-desc" placeholder="DESCRIÇÃO" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-white">
-            <input type="number" id="input-valor" inputmode="decimal" placeholder="R$ 0,00" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-2xl font-bold text-white">
+            <input type="number" id="input-valor" inputmode="decimal" placeholder="VALOR R$" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-2xl font-bold text-white">
+            
             <label class="flex items-center gap-3 p-2 opacity-70">
                 <input type="checkbox" id="input-recorrente" class="w-5 h-5 accent-indigo-600">
-                <span class="text-[10px] font-bold">CONTA FIXA (TODO MÊS)</span>
+                <span class="text-[10px] font-bold">CONTA FIXA (REPETIR TODO MÊS)</span>
             </label>
+
             <div class="flex gap-3">
-                <button onclick="fecharModal()" class="flex-1 p-4 text-slate-500 font-bold text-xs uppercase">VOLTAR</button>
-                <button onclick="salvarTransacao()" class="flex-1 bg-indigo-600 p-4 rounded-2xl font-bold text-xs shadow-lg">SALVAR</button>
+                <button onclick="fecharModal()" class="flex-1 p-4 text-slate-500 font-bold text-xs">CANCELAR</button>
+                <button onclick="salvarTransacao()" class="flex-1 bg-indigo-600 p-4 rounded-2xl font-bold text-xs shadow-lg">CONFIRMAR</button>
             </div>
         </div>
     </div>
@@ -90,26 +107,22 @@
         const meses = ["JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO", "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"];
         const SENHA_MESTRA = "0907";
         
-        // FUNÇÃO RESGATE: Busca dados em todas as versões possíveis que criamos
-        function resgatarDados() {
-            const gavetas = ['clarity_vFinal', 'clarity_v_ultimate', 'clarity_v13', 'clarity_v12', 'clarity_v_infinite', 'clarity_vFinal_Clean'];
-            for (let g of gavetas) {
-                let d = localStorage.getItem(g);
-                if (d) return JSON.parse(d);
-            }
-            return null;
-        }
-
-        let db = JSON.parse(localStorage.getItem('clarity_MASTER_FINAL')) || resgatarDados() || {
+        let db = JSON.parse(localStorage.getItem('clarity_v_ultimate_fix')) || {
             nome: "MESTRE", dark: true, mesReferencia: new Date().getMonth(),
-            anoReferencia: new Date().getFullYear(), saldoAnterior: 0, transacoes: [], objetivos: []
+            anoReferencia: new Date().getFullYear(), saldoAnterior: 0, transacoes: [], objetivos: [],
+            dataCriacao: new Date().getTime()
         };
 
         function render() {
-            document.body.className = db.dark ? '' : 'light-mode';
             document.getElementById('nome-user-display').innerText = db.nome;
             document.getElementById('mes-atual').innerText = `${meses[db.mesReferencia]} ${db.anoReferencia}`;
             
+            // LICENÇA
+            const hoje = new Date().getTime();
+            const restam = Math.ceil((30 * 24 * 60 * 60 * 1000 - (hoje - db.dataCriacao)) / (1000 * 60 * 60 * 24));
+            document.getElementById('status-licenca-texto').innerText = `LICENÇA: ${restam} DIAS RESTANTES`;
+            if(restam <= 0) document.getElementById('tela-licenca').classList.remove('hidden');
+
             const tRec = db.transacoes.filter(t => t.tipo === 'r').reduce((acc, t) => acc + t.valor, 0);
             const tGas = db.transacoes.filter(t => t.tipo === 'g').reduce((acc, t) => acc + t.valor, 0);
             const tObj = db.objetivos.reduce((acc, o) => acc + (o.atual || 0), 0);
@@ -119,42 +132,82 @@
             sElem.innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             sElem.className = total < 0 ? "text-5xl font-black tracking-tighter text-rose-500" : "text-5xl font-black tracking-tighter text-white";
 
+            // EXTRATO EDITÁVEL
             document.getElementById('extrato').innerHTML = db.transacoes.sort((a,b)=>new Date(b.data)-new Date(a.data)).map((t, i) => `
-                <div onclick="gerenciarItem(${i})" class="flex justify-between items-center border-b border-white/5 pb-4">
-                    <div><p class="text-xs font-black tracking-widest">${t.recorrente ? '🔄 ' : ''}${t.nome}</p></div>
+                <div onclick="gerenciarItem(${i})" class="flex justify-between items-center border-b border-white/5 pb-4 active:opacity-50">
+                    <div>
+                        <p class="text-xs font-black tracking-widest">${t.recorrente ? '🔄 ' : ''}${t.nome}</p>
+                        <p class="text-[9px] opacity-40 uppercase">${new Date(t.data).toLocaleDateString()}</p>
+                    </div>
                     <p class="text-sm font-black ${t.tipo==='r'?'text-emerald-500':'text-rose-400'}">R$ ${t.valor.toLocaleString('pt-BR')}</p>
                 </div>
-            `).join('');
+            `).join('') || '<p class="text-center text-[10px] opacity-30 italic">SEM LANÇAMENTOS</p>';
 
+            // SONHOS
             document.getElementById('lista-objetivos').innerHTML = db.objetivos.map((o, i) => `
-                <div onclick="gerenciarObj(${i})" class="min-w-[190px] glass p-6 rounded-[35px] border-b-4 border-indigo-600">
-                    <p class="text-[9px] text-indigo-400 font-bold uppercase">${o.nome}</p>
+                <div onclick="gerenciarObj(${i})" class="min-w-[190px] glass p-6 rounded-[35px] border-b-4 border-indigo-600 active:opacity-50">
+                    <p class="text-[9px] text-indigo-400 font-bold uppercase tracking-widest">${o.nome}</p>
                     <p class="text-xl font-black mt-1">R$ ${o.atual.toLocaleString('pt-BR')}</p>
                 </div>
-            `).join('');
-            
-            localStorage.setItem('clarity_MASTER_FINAL', JSON.stringify(db));
+            `).join('') || '<p class="text-[10px] opacity-30 italic">ADICIONE UM SONHO</p>';
+
+            salvar();
         }
 
+        // EDITAR TUDO
+        function gerenciarItem(i) {
+            const acao = confirm("OK = EDITAR | CANCELAR = EXCLUIR");
+            if (acao) {
+                const novoNome = prompt("NOVO NOME:", db.transacoes[i].nome);
+                const novoValor = parseFloat(prompt("NOVO VALOR:", db.transacoes[i].valor));
+                if(novoNome) db.transacoes[i].nome = novoNome.toUpperCase();
+                if(!isNaN(novoValor)) db.transacoes[i].valor = novoValor;
+            } else { if(confirm("EXCLUIR?")) db.transacoes.splice(i,1); }
+            render();
+        }
+
+        function gerenciarObj(i) {
+            const v = parseFloat(prompt("NOVO VALOR PARA O SONHO:"));
+            if(!isNaN(v)) { db.objetivos[i].atual = v; render(); }
+            else if(confirm("EXCLUIR SONHO?")) { db.objetivos.splice(i,1); render(); }
+        }
+
+        // MENTORIA CONTEÚDO
+        const dicasMaster = [
+            {t: "01. REGRA 50/30/20", d: "50% ESSENCIAL, 30% LAZER, 20% FUTURO. NÃO É GASTAR MENOS, É GASTAR CERTO."},
+            {t: "02. AMORTIZAÇÃO", d: "SEMPRE PAGUE A ÚLTIMA PARCELA DO FINANCIAMENTO. ISSO MATA OS JUROS DO BANCO."},
+            {t: "03. EFEITO LATTE", d: "GASTOS DE R$ 10 TODO DIA VIRAM R$ 3.650 NO ANO. REVISE SEUS PEQUENOS VAZAMENTOS."},
+            {t: "04. NEGOCIAÇÃO", d: "TUDO É NEGOCIÁVEL. À VISTA EXIJA 10% DE DESCONTO. SE NÃO DEREM, VOCÊ ESTÁ PAGANDO CARO."},
+            {t: "05. STATUS", d: "PARE DE COMPRAR COISAS QUE NÃO PRECISA PARA IMPRESSIONAR PESSOAS QUE NÃO GOSTA."}
+        ];
+        document.getElementById('cards-mentoria').innerHTML = dicasMaster.map(d => `
+            <div class="glass p-6 rounded-[35px] border-l-4 border-indigo-500">
+                <h3 class="font-black text-indigo-400 text-[10px] mb-2 tracking-widest uppercase">${d.t}</h3>
+                <p class="text-[11px] normal-case opacity-90 leading-relaxed">${d.d}</p>
+            </div>
+        `).join('');
+
+        function salvarTransacao() {
+            const ni = document.getElementById('input-desc'); const vi = document.getElementById('input-valor'); const ri = document.getElementById('input-recorrente');
+            if(ni.value && vi.value) {
+                db.transacoes.push({ nome: ni.value.toUpperCase(), valor: parseFloat(vi.value), tipo: tipoAberto, recorrente: ri.checked, data: new Date() });
+                ni.value = ''; vi.value = ''; ri.checked = false; fecharModal(); render();
+            }
+        }
+
+        // FUNÇÕES PADRÃO
         let tipoAberto = '';
         function abrirModal(t) { tipoAberto = t; document.getElementById('modal-transacao').classList.remove('hidden'); }
         function fecharModal() { document.getElementById('modal-transacao').classList.add('hidden'); }
-        function salvarTransacao() {
-            const n = document.getElementById('input-desc'); const v = document.getElementById('input-valor'); const r = document.getElementById('input-recorrente');
-            if(n.value && v.value) {
-                db.transacoes.push({ nome: n.value, valor: parseFloat(v.value), tipo: tipoAberto, recorrente: r.checked, data: new Date() });
-                n.value = ''; v.value = ''; r.checked = false; fecharModal(); render();
-            }
-        }
-        function gerenciarItem(i) { if(confirm("EXCLUIR LANÇAMENTO?")) { db.transacoes.splice(i,1); render(); } }
-        function gerenciarObj(i) { const v = parseFloat(prompt("NOVO VALOR:")); if(!isNaN(v)) { db.objetivos[i].atual = v; render(); } else if(confirm("EXCLUIR?")) { db.objetivos.splice(i,1); render(); } }
+        function salvar() { localStorage.setItem('clarity_v_ultimate_fix', JSON.stringify(db)); }
         function abrirConfig() { document.getElementById('view-principal').classList.add('hidden'); document.getElementById('view-config').classList.remove('hidden'); }
-        function fecharAbas() { document.getElementById('view-principal').classList.remove('hidden'); document.getElementById('view-config').classList.add('hidden'); }
-        function toggleTema() { db.dark = !db.dark; render(); }
+        function fecharAbas() { document.getElementById('view-principal').classList.remove('hidden'); document.getElementById('view-config').classList.add('hidden'); document.getElementById('view-mentoria').classList.add('hidden'); }
+        function abrirMentoria() { document.getElementById('view-principal').classList.add('hidden'); document.getElementById('view-mentoria').classList.remove('hidden'); }
         function salvarNome() { db.nome = document.getElementById('input-nome-user').value.toUpperCase(); render(); }
-        function resetaTudo() { if(confirm("APAGAR TUDO?")) { localStorage.clear(); location.reload(); } }
-        function exportarBackup() { navigator.clipboard.writeText(JSON.stringify(db)); alert("BACKUP COPIADO!"); }
-        function abrirModalObjetivo() { const n = prompt("SONHO:"); const m = parseFloat(prompt("META:")); if(n && m) { db.objetivos.push({nome:n, meta:m, atual:0}); render(); } }
+        function validarSenha() { if(document.getElementById('senha-licenca').value === SENHA_MESTRA) { db.dataCriacao = new Date().getTime(); document.getElementById('tela-licenca').classList.add('hidden'); render(); } else alert("ERRO!"); }
+        function resetaTudo() { if(confirm("RESETAR TUDO?")) { localStorage.clear(); location.reload(); } }
+        function exportarBackup() { navigator.clipboard.writeText(JSON.stringify(db)); alert("CÓDIGO COPIADO!"); }
+        function abrirModalObjetivo() { const n = prompt("QUAL O SONHO?"); const m = parseFloat(prompt("META TOTAL:")); if(n && m) { db.objetivos.push({nome:n.toUpperCase(), meta:m, atual:0}); render(); } }
 
         render();
     </script>
