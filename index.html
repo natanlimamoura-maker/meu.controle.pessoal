@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CLARITY PRO MASTER</title>
+    <link rel="manifest" href="./manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
@@ -18,15 +19,15 @@
 <body class="pb-10">
 
     <div id="tela-licenca" class="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center p-8 text-center hidden z-[1000]">
-        <h2 class="text-3xl font-black mb-6 italic text-indigo-500">CLARITY PRO</h2>
+        <h2 class="text-3xl font-black mb-6 italic text-indigo-500 uppercase">LICENÇA EXPIRADA</h2>
         <input type="number" id="senha-licenca" placeholder="SENHA" class="bg-white/5 border border-white/10 p-5 rounded-3xl w-full max-w-xs text-center mb-4 text-white text-xl font-bold outline-none">
-        <button onclick="validarSenha()" class="bg-indigo-600 p-5 rounded-3xl w-full max-w-xs font-black">RENOVAR</button>
+        <button onclick="validarSenha()" class="bg-indigo-600 p-5 rounded-3xl w-full max-w-xs font-black uppercase">RENOVAR ACESSO</button>
     </div>
 
     <header class="p-8 pt-12 text-center relative border-b border-white/5 bg-gradient-to-b from-indigo-500/5 to-transparent">
         <button onclick="abrirConfig()" class="absolute top-10 right-8 text-2xl opacity-40 p-2">⚙️</button>
-        <p id="mes-atual" class="text-[11px] font-extrabold text-indigo-400 tracking-[0.2em] mb-2 italic">JANEIRO</p>
-        <p class="text-[9px] opacity-40 font-bold mb-1 uppercase">SALDO ACUMULADO</p>
+        <p id="mes-atual" class="text-[11px] font-extrabold text-indigo-400 tracking-[0.2em] mb-2 italic">---</p>
+        <p class="text-[9px] opacity-40 font-bold mb-1">VALOR EM CAIXA ACUMULADO</p>
         <h1 id="saldo-geral" class="text-5xl font-black tracking-tighter italic">R$ 0,00</h1>
     </header>
 
@@ -46,50 +47,58 @@
 
         <section>
             <div class="flex justify-between items-center mb-5">
-                <h2 class="font-black text-[11px] opacity-60 italic tracking-widest uppercase">SONHOS</h2>
-                <button onclick="abrirModalObjetivo()" class="text-[10px] font-black text-indigo-500 uppercase">+ NOVO</button>
+                <h2 class="font-black text-[11px] opacity-60 italic tracking-widest">OBJETIVOS</h2>
+                <button onclick="abrirModalObjetivo()" class="text-[10px] font-black text-indigo-500">+ NOVO</button>
             </div>
             <div id="lista-objetivos" class="flex gap-4 overflow-x-auto hide-scroll pb-2"></div>
         </section>
 
         <section class="glass rounded-[40px] p-7">
-            <h2 class="text-[10px] font-black opacity-30 tracking-[0.3em] mb-8 text-center italic uppercase">HISTÓRICO (CLIQUE P/ EDITAR)</h2>
+            <h2 class="text-[10px] font-black opacity-30 tracking-[0.3em] mb-8 text-center italic">HISTÓRICO (EDITÁVEL)</h2>
             <div id="extrato" class="space-y-6"></div>
         </section>
     </main>
 
     <main id="view-mentoria" class="hidden p-8 space-y-8 max-w-lg mx-auto min-h-screen pb-40">
-        <button onclick="fecharAbas()" class="bg-white/5 p-4 rounded-2xl text-indigo-400 font-black text-[10px] uppercase">← VOLTAR AO PAINEL</button>
-        <h2 class="text-3xl font-black italic text-indigo-500 uppercase">MANUAL DO MESTRE</h2>
+        <button onclick="fecharAbas()" class="bg-white/5 p-4 rounded-2xl text-indigo-400 font-black text-[10px]">← VOLTAR AO PAINEL</button>
+        <h2 class="text-3xl font-black italic text-indigo-500 uppercase">MANUAL DA RIQUEZA</h2>
         
         <div class="space-y-5">
             <div class="glass p-7 rounded-[40px] border-l-4 border-indigo-600">
-                <h3 class="text-indigo-400 font-black text-[10px] mb-3 tracking-[0.2em] uppercase">01. REGRA 50/30/20</h3>
-                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">50% ESSENCIAL, 30% ESTILO DE VIDA, 20% INVESTIMENTOS. NÃO QUEBRE A REGRA.</p>
+                <h3 class="text-indigo-400 font-black text-[10px] mb-3 tracking-[0.2em]">01. REGRA 50/30/20</h3>
+                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">50% ESSENCIAL, 30% ESTILO DE VIDA, 20% INVESTIMENTOS. "NÃO ECONOMIZE O QUE SOBRA DEPOIS DE GASTAR, GASTE O QUE SOBRA DEPOIS DE ECONOMIZAR." - WARREN BUFFETT.</p>
             </div>
             <div class="glass p-7 rounded-[40px] border-l-4 border-emerald-600">
-                <h3 class="text-emerald-400 font-black text-[10px] mb-3 tracking-[0.2em] uppercase">02. AMORTIZAÇÃO</h3>
-                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">PAGUE A ÚLTIMA PARCELA DO FINANCIAMENTO. CADA 1 REAL PAGO NO FIM ELIMINA 3 REAIS DE JUROS.</p>
+                <h3 class="text-emerald-400 font-black text-[10px] mb-3 tracking-[0.2em]">02. O PODER DA AMORTIZAÇÃO</h3>
+                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">PAGUE SEMPRE A ÚLTIMA PARCELA. CADA REAL ADIANTADO É UM JURO QUE VOCÊ NÃO DÁ AO BANCO.</p>
             </div>
             <div class="glass p-7 rounded-[40px] border-l-4 border-amber-600">
-                <h3 class="text-amber-400 font-black text-[10px] mb-3 tracking-[0.2em] uppercase">03. RESERVA DE PAZ</h3>
-                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">TENHA 6 MESES DO SEU CUSTO DE VIDA GUARDADOS PARA TER PAZ DE ESPÍRITO.</p>
+                <h3 class="text-amber-400 font-black text-[10px] mb-3 tracking-[0.2em]">03. RESERVA DE SEGURANÇA</h3>
+                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">DORMIR BEM NÃO TEM PREÇO. TENHA 6 MESES DE CUSTO FIXO EM CAIXA ANTES DE SE AVENTURAR.</p>
             </div>
             <div class="glass p-7 rounded-[40px] border-l-4 border-rose-600">
-                <h3 class="text-rose-400 font-black text-[10px] mb-3 tracking-[0.2em] uppercase">04. STATUS É POBREZA</h3>
-                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">PARE DE IMPRESSIONAR QUEM VOCÊ NÃO GOSTA COM O DINHEIRO QUE VOCÊ NÃO TEM.</p>
+                <h3 class="text-rose-400 font-black text-[10px] mb-3 tracking-[0.2em]">04. STATUS VS. PATRIMÔNIO</h3>
+                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">"MUITAS PESSOAS GASTAM DINHEIRO QUE NÃO GANHARAM, PARA COMPRAR COISAS QUE NÃO QUEREM, PARA IMPRESSIONAR PESSOAS QUE NÃO GOSTAM." - WILL ROGERS.</p>
+            </div>
+            <div class="glass p-7 rounded-[40px] border-l-4 border-cyan-600">
+                <h3 class="text-cyan-400 font-black text-[10px] mb-3 tracking-[0.2em]">05. MENTE MESTRE</h3>
+                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">"TODO HOMEM É O QUE É POR CAUSA DOS PENSAMENTOS QUE ELE PERMITE QUE HABITEM SUA MENTE." - NAPOLEON HILL.</p>
+            </div>
+            <div class="glass p-7 rounded-[40px] border-l-4 border-violet-600">
+                <h3 class="text-violet-400 font-black text-[10px] mb-3 tracking-[0.2em]">06. ATIVOS VS. PASSIVOS</h3>
+                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">OS RICOS COMPRAM ATIVOS (COISAS QUE PÕEM DINHEIRO NO BOLSO). OS POBRES COMPRAM PASSIVOS (COISAS QUE TIRAM DINHEIRO) ACHANDO QUE SÃO ATIVOS.</p>
             </div>
         </div>
     </main>
 
     <main id="view-config" class="hidden p-8 space-y-8 max-w-lg mx-auto min-h-screen">
-        <button onclick="fecharAbas()" class="text-indigo-500 font-black text-[10px] uppercase">← FECHAR</button>
-        <h2 class="text-3xl font-black italic uppercase">AJUSTES</h2>
+        <button onclick="fecharAbas()" class="text-indigo-500 font-black text-[10px]">← VOLTAR</button>
+        <h2 class="text-3xl font-black italic">AJUSTES</h2>
         <div class="glass p-7 rounded-[35px] space-y-5">
-            <input type="text" id="input-nome-user" onchange="salvarNome()" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-sm font-bold uppercase" placeholder="NOME">
-            <div id="status-licenca-texto" class="text-[10px] font-black text-indigo-400 uppercase">LICENÇA: -- DIAS</div>
-            <button onclick="exportarBackup()" class="w-full p-4 bg-white/5 rounded-2xl text-[11px] font-black uppercase">COPIAR BACKUP</button>
-            <button onclick="resetaTudo()" class="w-full p-4 bg-rose-500/10 rounded-2xl text-[11px] font-black text-rose-500 uppercase">ZERAR APP</button>
+            <input type="text" id="input-nome-user" onchange="salvarNome()" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-sm font-bold uppercase" placeholder="SEU NOME">
+            <div id="status-licenca-texto" class="text-[10px] font-black text-indigo-400">---</div>
+            <button onclick="exportarBackup()" class="w-full p-4 bg-white/5 rounded-2xl text-[11px] font-black">COPIAR BACKUP</button>
+            <button onclick="resetaTudo()" class="w-full p-4 bg-rose-500/10 rounded-2xl text-[11px] font-black text-rose-500">LIMPAR APP</button>
         </div>
     </main>
 
@@ -98,9 +107,9 @@
             <h3 class="text-xl font-black text-center italic uppercase" id="modal-titulo">LANÇAMENTO</h3>
             <input type="text" id="input-desc" placeholder="DESCRIÇÃO" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none text-white font-bold uppercase">
             <input type="number" id="input-valor" inputmode="decimal" placeholder="VALOR R$" class="w-full bg-white/5 border border-white/10 p-5 rounded-3xl outline-none text-3xl font-black text-white">
-            <label class="flex items-center gap-4 p-2">
+            <label class="flex items-center gap-4 p-2 cursor-pointer">
                 <input type="checkbox" id="input-recorrente" class="w-6 h-6 rounded-lg accent-indigo-600">
-                <span class="text-[10px] font-black opacity-70 uppercase">CONTA FIXA</span>
+                <span class="text-[10px] font-black opacity-70 uppercase">REPETIR TODO MÊS</span>
             </label>
             <div class="flex gap-4">
                 <button onclick="fecharModal()" class="flex-1 text-slate-500 font-extrabold text-[11px] uppercase">VOLTAR</button>
@@ -113,7 +122,7 @@
         const meses = ["JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO", "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"];
         const SENHA_MESTRA = "0907";
 
-        let db = JSON.parse(localStorage.getItem('clarity_v_ultimate_gold_fix')) || {
+        let db = JSON.parse(localStorage.getItem('clarity_v_infinity_final')) || {
             nome: "MESTRE", dark: true, mesReferencia: new Date().getMonth(),
             anoReferencia: new Date().getFullYear(), saldoAnterior: 0, 
             transacoes: [], objetivos: [], dataCriacao: new Date().getTime()
@@ -132,24 +141,24 @@
 
             const sElem = document.getElementById('saldo-geral');
             sElem.innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            sElem.className = total < 0 ? "text-5xl font-black tracking-tighter text-rose-500 italic" : "text-5xl font-black tracking-tighter text-white italic";
+            sElem.className = total < 0 ? "text-5xl font-black tracking-tighter text-rose-500 italic transition-all" : "text-5xl font-black tracking-tighter text-white italic transition-all";
 
             document.getElementById('extrato').innerHTML = db.transacoes.sort((a,b)=>new Date(b.data)-new Date(a.data)).map((t, i) => `
-                <div onclick="gerenciarItem(${i})" class="flex justify-between items-center border-b border-white/5 pb-5">
+                <div onclick="gerenciarItem(${i})" class="flex justify-between items-center border-b border-white/5 pb-5 active:opacity-40">
                     <div><p class="text-[11px] font-black uppercase">${t.recorrente ? '🔄 ' : ''}${t.nome}</p></div>
                     <p class="text-[13px] font-black ${t.tipo==='r'?'text-emerald-500':'text-rose-400'}">R$ ${t.valor.toLocaleString('pt-BR', {minimumFractionDigits:2})}</p>
                 </div>
-            `).join('') || '<p class="text-center opacity-20 py-10 italic uppercase">NADA LANÇADO</p>';
+            `).join('') || '<p class="text-center opacity-20 py-10 italic uppercase">SEM DADOS</p>';
 
             document.getElementById('lista-objetivos').innerHTML = db.objetivos.map((o, i) => `
-                <div onclick="gerenciarObj(${i})" class="min-w-[200px] glass p-7 rounded-[40px] border-b-8 border-indigo-600">
+                <div onclick="gerenciarObj(${i})" class="min-w-[200px] glass p-7 rounded-[40px] border-b-8 border-indigo-600 active:scale-95 transition-all">
                     <p class="text-[9px] text-indigo-400 font-black mb-1 uppercase">${o.nome}</p>
-                    <p class="text-xl font-black">R$ ${o.atual.toLocaleString('pt-BR')}</p>
+                    <p class="text-xl font-black uppercase">R$ ${o.atual.toLocaleString('pt-BR')}</p>
                     <div class="w-full bg-white/5 h-1.5 rounded-full mt-4 overflow-hidden"><div class="bg-indigo-500 h-full" style="width: ${Math.min((o.atual/o.meta)*100, 100)}%"></div></div>
                 </div>
-            `).join('') || '<p class="opacity-20 text-[9px] font-black italic uppercase">SEM OBJETIVOS</p>';
+            `).join('') || '<p class="opacity-20 text-[9px] font-black italic uppercase">NADA AQUI</p>';
             
-            localStorage.setItem('clarity_v_ultimate_gold_fix', JSON.stringify(db));
+            localStorage.setItem('clarity_v_infinity_final', JSON.stringify(db));
         }
 
         function gerenciarItem(i) {
@@ -186,14 +195,22 @@
                 n.value = ''; v.value = ''; r.checked = false; fecharModal(); render();
             }
         }
-        function abrirModalObjetivo() { const n = prompt("NOME DO SONHO?"); const m = parseFloat(prompt("META?")); if(n && m) { db.objetivos.push({nome:n.toUpperCase(), meta:m, atual:0}); render(); } }
+
+        function abrirModalObjetivo() { const n = prompt("NOME DO SONHO?"); const m = parseFloat(prompt("META TOTAL?")); if(n && m) { db.objetivos.push({nome:n.toUpperCase(), meta:m, atual:0}); render(); } }
         function abrirConfig() { fecharAbas(); document.getElementById('view-principal').classList.add('hidden'); document.getElementById('view-config').classList.remove('hidden'); }
         function abrirMentoria() { fecharAbas(); document.getElementById('view-principal').classList.add('hidden'); document.getElementById('view-mentoria').classList.remove('hidden'); }
         function fecharAbas() { document.getElementById('view-principal').classList.remove('hidden'); document.getElementById('view-config').classList.add('hidden'); document.getElementById('view-mentoria').classList.add('hidden'); window.scrollTo(0,0); }
         function salvarNome() { db.nome = document.getElementById('input-nome-user').value.toUpperCase(); render(); }
         function validarSenha() { if(document.getElementById('senha-licenca').value === SENHA_MESTRA) { db.dataCriacao = new Date().getTime(); document.getElementById('tela-licenca').classList.add('hidden'); render(); } else alert("ERRO!"); }
         function resetaTudo() { if(confirm("APAGAR TUDO?")) { localStorage.clear(); location.reload(); } }
-        function exportarBackup() { navigator.clipboard.writeText(JSON.stringify(db)); alert("COPIADO!"); }
+        function exportarBackup() { navigator.clipboard.writeText(JSON.stringify(db)); alert("BACKUP COPIADO!"); }
+
+        // REGISTRO DE PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js').then(reg => console.log('PWA ATIVO')).catch(err => console.log('PWA FALHOU'));
+            });
+        }
 
         render();
     </script>
