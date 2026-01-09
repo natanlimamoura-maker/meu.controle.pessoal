@@ -1,7 +1,7 @@
 {
-  "name": "Clarity Pro Master",
-  "short_name": "ClarityPro",
-  "start_url": "index.html",
+  "name": "CLARITY PRO MASTER",
+  "short_name": "CLARITY",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#020617",
   "theme_color": "#4f46e5",
