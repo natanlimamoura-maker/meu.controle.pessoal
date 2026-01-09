@@ -4,105 +4,107 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>CLARITY PRO MASTER</title>
-    <link rel="manifest" href="./manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #020617; --card: rgba(30, 41, 59, 0.6); --primary: #6366f1; }
+        :root { --bg: #020617; --card: rgba(30, 41, 59, 0.6); }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #f8fafc; text-transform: uppercase; transition: all 0.3s ease; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
         .glass { background: var(--card); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
         .hide-scroll::-webkit-scrollbar { display: none; }
         input { text-transform: uppercase; background: transparent; }
-        .btn-master { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); transition: transform 0.1s; }
-        .btn-master:active { transform: scale(0.96); }
-        .card-entry { transition: background 0.2s; }
-        .card-entry:active { background: rgba(255,255,255,0.05); }
+        .btn-master { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); }
     </style>
 </head>
-<body class="pb-10 select-none">
+<body class="pb-10">
 
     <div id="tela-licenca" class="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center p-8 text-center hidden z-[1000]">
-        <h2 class="text-3xl font-black mb-6 italic tracking-tighter text-indigo-500">CLARITY PRO</h2>
-        <p class="text-[10px] mb-8 opacity-60">SISTEMA BLOQUEADO. RENOVE SEU ACESSO.</p>
-        <input type="number" id="senha-licenca" placeholder="SENHA" class="bg-white/5 border border-white/10 p-5 rounded-3xl w-full max-w-xs text-center mb-4 text-white text-xl font-bold outline-none focus:border-indigo-500">
-        <button onclick="validarSenha()" class="bg-indigo-600 p-5 rounded-3xl w-full max-w-xs font-black shadow-lg shadow-indigo-500/20">RENOVAR AGORA</button>
+        <h2 class="text-3xl font-black mb-6 italic text-indigo-500">CLARITY PRO</h2>
+        <input type="number" id="senha-licenca" placeholder="SENHA" class="bg-white/5 border border-white/10 p-5 rounded-3xl w-full max-w-xs text-center mb-4 text-white text-xl font-bold outline-none">
+        <button onclick="validarSenha()" class="bg-indigo-600 p-5 rounded-3xl w-full max-w-xs font-black">RENOVAR</button>
     </div>
 
     <header class="p-8 pt-12 text-center relative border-b border-white/5 bg-gradient-to-b from-indigo-500/5 to-transparent">
-        <button onclick="abrirConfig()" class="absolute top-10 right-8 text-2xl opacity-40 active:opacity-100 p-2">⚙️</button>
-        <p id="mes-atual" class="text-[11px] font-extrabold text-indigo-400 tracking-[0.2em] mb-2 italic">JANEIRO 2024</p>
-        <p class="text-[9px] opacity-40 font-bold mb-1">SALDO DISPONÍVEL ACUMULADO</p>
-        <h1 id="saldo-geral" class="text-5xl font-black tracking-tighter italic transition-all">R$ 0,00</h1>
+        <button onclick="abrirConfig()" class="absolute top-10 right-8 text-2xl opacity-40 p-2">⚙️</button>
+        <p id="mes-atual" class="text-[11px] font-extrabold text-indigo-400 tracking-[0.2em] mb-2 italic">JANEIRO</p>
+        <p class="text-[9px] opacity-40 font-bold mb-1 uppercase">SALDO ACUMULADO</p>
+        <h1 id="saldo-geral" class="text-5xl font-black tracking-tighter italic">R$ 0,00</h1>
     </header>
 
     <main id="view-principal" class="p-6 space-y-10 max-w-lg mx-auto">
-        
-        <div onclick="abrirMentoria()" class="w-full btn-master p-6 rounded-[35px] flex items-center justify-between shadow-2xl shadow-indigo-500/20 cursor-pointer">
+        <div onclick="abrirMentoria()" class="w-full btn-master p-6 rounded-[35px] flex items-center justify-between shadow-2xl shadow-indigo-500/20 cursor-pointer active:scale-95 transition-all">
             <div class="text-left">
-                <p class="text-[9px] font-black text-white/60 tracking-widest">ESTRATÉGIA FINANCEIRA</p>
-                <h2 class="text-lg font-black text-white italic">CENTRAL DO MESTRE 🧠</h2>
+                <p class="text-[9px] font-black text-white/60 tracking-widest uppercase">ESTRATÉGIA</p>
+                <h2 class="text-lg font-black text-white italic uppercase">CENTRAL DO MESTRE 🧠</h2>
             </div>
-            <div class="bg-white/20 p-3 rounded-2xl">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="9 5l7 7-7 7" /></svg>
-            </div>
+            <span class="text-[10px] bg-white/20 px-4 py-2 rounded-full font-bold">VER</span>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-            <button onclick="abrirModal('receita')" class="bg-emerald-500/10 border border-emerald-500/20 p-7 rounded-[35px] text-emerald-500 font-black text-xs tracking-tighter">+ GANHEI</button>
-            <button onclick="abrirModal('gasto')" class="bg-rose-500/10 border border-rose-500/20 p-7 rounded-[35px] text-rose-400 font-black text-xs tracking-tighter">- GASTEI</button>
+            <button onclick="abrirModal('receita')" class="bg-emerald-500/10 border border-emerald-500/20 p-7 rounded-[35px] text-emerald-500 font-black text-xs uppercase">+ GANHEI</button>
+            <button onclick="abrirModal('gasto')" class="bg-rose-500/10 border border-rose-500/20 p-7 rounded-[35px] text-rose-400 font-black text-xs uppercase">- GASTEI</button>
         </div>
 
         <section>
-            <div class="flex justify-between items-center mb-5 px-1">
-                <h2 class="font-black text-[11px] opacity-60 italic tracking-widest">MEUS SONHOS</h2>
-                <button onclick="abrirModalObjetivo()" class="text-[10px] font-black text-indigo-500 bg-indigo-500/10 px-3 py-1 rounded-full">+ NOVO</button>
+            <div class="flex justify-between items-center mb-5">
+                <h2 class="font-black text-[11px] opacity-60 italic tracking-widest uppercase">SONHOS</h2>
+                <button onclick="abrirModalObjetivo()" class="text-[10px] font-black text-indigo-500 uppercase">+ NOVO</button>
             </div>
             <div id="lista-objetivos" class="flex gap-4 overflow-x-auto hide-scroll pb-2"></div>
         </section>
 
         <section class="glass rounded-[40px] p-7">
-            <h2 class="text-[10px] font-black opacity-30 tracking-[0.3em] mb-8 text-center italic">HISTÓRICO MENSAL</h2>
+            <h2 class="text-[10px] font-black opacity-30 tracking-[0.3em] mb-8 text-center italic uppercase">HISTÓRICO (CLIQUE P/ EDITAR)</h2>
             <div id="extrato" class="space-y-6"></div>
         </section>
     </main>
 
-    <main id="view-mentoria" class="hidden p-8 space-y-8 max-w-lg mx-auto min-h-screen">
-        <button onclick="fecharAbas()" class="bg-white/5 p-4 rounded-2xl text-indigo-400 font-black text-[10px] flex items-center gap-2">← VOLTAR AO PAINEL</button>
-        <h2 class="text-3xl font-black italic text-indigo-500">MANUAL DO MESTRE</h2>
-        <div class="space-y-5" id="conteudo-mentoria"></div>
-    </main>
-
-    <main id="view-config" class="hidden p-8 space-y-8 max-w-lg mx-auto min-h-screen">
-        <button onclick="fecharAbas()" class="text-indigo-500 font-black text-[10px]">← FECHAR AJUSTES</button>
-        <h2 class="text-3xl font-black italic">CONFIGURAÇÕES</h2>
-        <div class="glass p-7 rounded-[35px] space-y-5">
-            <div>
-                <p class="text-[10px] font-black opacity-40 mb-2">IDENTIFICAÇÃO</p>
-                <input type="text" id="input-nome-user" onchange="salvarNome()" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-sm font-bold" placeholder="NOME DO MESTRE">
+    <main id="view-mentoria" class="hidden p-8 space-y-8 max-w-lg mx-auto min-h-screen pb-40">
+        <button onclick="fecharAbas()" class="bg-white/5 p-4 rounded-2xl text-indigo-400 font-black text-[10px] uppercase">← VOLTAR AO PAINEL</button>
+        <h2 class="text-3xl font-black italic text-indigo-500 uppercase">MANUAL DO MESTRE</h2>
+        
+        <div class="space-y-5">
+            <div class="glass p-7 rounded-[40px] border-l-4 border-indigo-600">
+                <h3 class="text-indigo-400 font-black text-[10px] mb-3 tracking-[0.2em] uppercase">01. REGRA 50/30/20</h3>
+                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">50% ESSENCIAL, 30% ESTILO DE VIDA, 20% INVESTIMENTOS. NÃO QUEBRE A REGRA.</p>
             </div>
-            <div class="pt-4 border-t border-white/5">
-                <p class="text-[10px] font-black opacity-40 mb-4">SEGURANÇA E DADOS</p>
-                <div id="status-licenca-texto" class="text-[10px] font-black text-indigo-400 mb-4">STATUS DA LICENÇA: OK</div>
-                <button onclick="exportarBackup()" class="w-full p-4 bg-white/5 rounded-2xl text-[11px] font-black mb-3 text-indigo-200">COPIAR BACKUP (NUVEM)</button>
-                <button onclick="resetaTudo()" class="w-full p-4 bg-rose-500/10 rounded-2xl text-[11px] font-black text-rose-500">ZERAR TODO O APP</button>
+            <div class="glass p-7 rounded-[40px] border-l-4 border-emerald-600">
+                <h3 class="text-emerald-400 font-black text-[10px] mb-3 tracking-[0.2em] uppercase">02. AMORTIZAÇÃO</h3>
+                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">PAGUE A ÚLTIMA PARCELA DO FINANCIAMENTO. CADA 1 REAL PAGO NO FIM ELIMINA 3 REAIS DE JUROS.</p>
+            </div>
+            <div class="glass p-7 rounded-[40px] border-l-4 border-amber-600">
+                <h3 class="text-amber-400 font-black text-[10px] mb-3 tracking-[0.2em] uppercase">03. RESERVA DE PAZ</h3>
+                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">TENHA 6 MESES DO SEU CUSTO DE VIDA GUARDADOS PARA TER PAZ DE ESPÍRITO.</p>
+            </div>
+            <div class="glass p-7 rounded-[40px] border-l-4 border-rose-600">
+                <h3 class="text-rose-400 font-black text-[10px] mb-3 tracking-[0.2em] uppercase">04. STATUS É POBREZA</h3>
+                <p class="text-[12px] opacity-70 leading-relaxed font-semibold uppercase">PARE DE IMPRESSIONAR QUEM VOCÊ NÃO GOSTA COM O DINHEIRO QUE VOCÊ NÃO TEM.</p>
             </div>
         </div>
     </main>
 
+    <main id="view-config" class="hidden p-8 space-y-8 max-w-lg mx-auto min-h-screen">
+        <button onclick="fecharAbas()" class="text-indigo-500 font-black text-[10px] uppercase">← FECHAR</button>
+        <h2 class="text-3xl font-black italic uppercase">AJUSTES</h2>
+        <div class="glass p-7 rounded-[35px] space-y-5">
+            <input type="text" id="input-nome-user" onchange="salvarNome()" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-sm font-bold uppercase" placeholder="NOME">
+            <div id="status-licenca-texto" class="text-[10px] font-black text-indigo-400 uppercase">LICENÇA: -- DIAS</div>
+            <button onclick="exportarBackup()" class="w-full p-4 bg-white/5 rounded-2xl text-[11px] font-black uppercase">COPIAR BACKUP</button>
+            <button onclick="resetaTudo()" class="w-full p-4 bg-rose-500/10 rounded-2xl text-[11px] font-black text-rose-500 uppercase">ZERAR APP</button>
+        </div>
+    </main>
+
     <div id="modal-transacao" class="fixed inset-0 bg-slate-950/95 hidden flex items-center justify-center p-6 z-[900]">
-        <div class="glass w-full max-w-sm p-8 rounded-[40px] space-y-6 border border-white/10">
-            <h3 class="text-xl font-black text-center italic tracking-tight" id="modal-titulo">LANÇAMENTO</h3>
-            <div class="space-y-4">
-                <input type="text" id="input-desc" placeholder="DESCRIÇÃO" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none text-white font-bold">
-                <input type="number" id="input-valor" inputmode="decimal" placeholder="VALOR R$" class="w-full bg-white/5 border border-white/10 p-5 rounded-3xl outline-none text-3xl font-black text-white">
-            </div>
-            <label class="flex items-center gap-4 p-2 cursor-pointer">
+        <div class="glass w-full max-w-sm p-8 rounded-[40px] space-y-6">
+            <h3 class="text-xl font-black text-center italic uppercase" id="modal-titulo">LANÇAMENTO</h3>
+            <input type="text" id="input-desc" placeholder="DESCRIÇÃO" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none text-white font-bold uppercase">
+            <input type="number" id="input-valor" inputmode="decimal" placeholder="VALOR R$" class="w-full bg-white/5 border border-white/10 p-5 rounded-3xl outline-none text-3xl font-black text-white">
+            <label class="flex items-center gap-4 p-2">
                 <input type="checkbox" id="input-recorrente" class="w-6 h-6 rounded-lg accent-indigo-600">
-                <span class="text-[10px] font-black opacity-70">FIXO (REPETIR TODO MÊS)</span>
+                <span class="text-[10px] font-black opacity-70 uppercase">CONTA FIXA</span>
             </label>
-            <div class="flex gap-4 pt-4">
-                <button onclick="fecharModal()" class="flex-1 p-5 text-slate-500 font-extrabold text-[11px]">CANCELAR</button>
-                <button onclick="salvarTransacao()" class="flex-1 bg-indigo-600 p-5 rounded-[25px] font-black text-[11px] shadow-xl shadow-indigo-500/20">CONFIRMAR</button>
+            <div class="flex gap-4">
+                <button onclick="fecharModal()" class="flex-1 text-slate-500 font-extrabold text-[11px] uppercase">VOLTAR</button>
+                <button onclick="salvarTransacao()" class="flex-1 bg-indigo-600 p-5 rounded-[25px] font-black text-[11px] uppercase">SALVAR</button>
             </div>
         </div>
     </div>
@@ -111,43 +113,18 @@
         const meses = ["JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO", "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"];
         const SENHA_MESTRA = "0907";
 
-        // BANCO DE DADOS PRINCIPAL
-        let db = JSON.parse(localStorage.getItem('clarity_v_ultimate_gold')) || {
+        let db = JSON.parse(localStorage.getItem('clarity_v_ultimate_gold_fix')) || {
             nome: "MESTRE", dark: true, mesReferencia: new Date().getMonth(),
             anoReferencia: new Date().getFullYear(), saldoAnterior: 0, 
             transacoes: [], objetivos: [], dataCriacao: new Date().getTime()
         };
 
-        const mentoria = [
-            {t: "01. REGRA 50/30/20", d: "50% ESSENCIAL, 30% ESTILO DE VIDA, 20% INVESTIMENTOS. SE NÃO SOBRA 20%, VOCÊ ESTÁ VIVENDO UMA VIDA QUE NÃO PODE PAGAR."},
-            {t: "02. AMORTIZAÇÃO", d: "SEMPRE PAGUE A ÚLTIMA PARCELA DO FINANCIAMENTO. CADA 1 REAL PAGO NA ÚLTIMA ELIMINA ATÉ 3 REAIS DE JUROS FUTUROS."},
-            {t: "03. RESERVA DE PAZ", d: "TENHA 6 MESES DO SEU CUSTO DE VIDA NUMA CONTA SEPARADA. A PAZ DE ESPÍRITO TE FAZ GANHAR MAIS DINHEIRO."},
-            {t: "04. COMPRAS À VISTA", d: "SÓ COMPRE O QUE VOCÊ PODE PAGAR DUAS VEZES À VISTA. SE NÃO PODE, VOCÊ NÃO TEM DINHEIRO PARA ISSO AINDA."},
-            {t: "05. STATUS É POBREZA", d: "PESSOAS RICAS PARECEM POBRES. PESSOAS POBRES PARECEM RICAS. ESCOLHA DE QUAL LADO VOCÊ QUER ESTAR."}
-        ];
-
         function render() {
-            // VIRADA DE MÊS AUTOMÁTICA
-            const agora = new Date();
-            if(agora.getMonth() !== db.mesReferencia || agora.getFullYear() !== db.anoReferencia) {
-                const totalMês = db.transacoes.filter(t=>t.tipo==='r').reduce((acc,t)=>acc+t.valor,0) - db.transacoes.filter(t=>t.tipo==='g').reduce((acc,t)=>acc+t.valor,0);
-                db.saldoAnterior += totalMês;
-                db.transacoes = db.transacoes.filter(t => t.recorrente);
-                db.mesReferencia = agora.getMonth();
-                db.anoReferencia = agora.getFullYear();
-                alert("O MÊS VIROU! SALDO ACUMULADO COM SUCESSO.");
-            }
-
-            document.getElementById('nome-user-display').innerText = db.nome;
-            document.getElementById('input-nome-user').value = db.nome;
             document.getElementById('mes-atual').innerText = `${meses[db.mesReferencia]} ${db.anoReferencia}`;
-            
-            // LICENÇA
             const restam = Math.ceil((30 * 24 * 60 * 60 * 1000 - (new Date().getTime() - db.dataCriacao)) / (1000 * 60 * 60 * 24));
-            document.getElementById('status-licenca-texto').innerText = `STATUS DA LICENÇA: ${restam} DIAS RESTANTES`;
+            document.getElementById('status-licenca-texto').innerText = `LICENÇA: ${restam} DIAS RESTANTES`;
             if(restam <= 0) document.getElementById('tela-licenca').classList.remove('hidden');
 
-            // CÁLCULOS
             const tRec = db.transacoes.filter(t => t.tipo === 'r').reduce((acc, t) => acc + t.valor, 0);
             const tGas = db.transacoes.filter(t => t.tipo === 'g').reduce((acc, t) => acc + t.valor, 0);
             const tObj = db.objetivos.reduce((acc, o) => acc + (o.atual || 0), 0);
@@ -157,94 +134,67 @@
             sElem.innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
             sElem.className = total < 0 ? "text-5xl font-black tracking-tighter text-rose-500 italic" : "text-5xl font-black tracking-tighter text-white italic";
 
-            // EXTRATO
             document.getElementById('extrato').innerHTML = db.transacoes.sort((a,b)=>new Date(b.data)-new Date(a.data)).map((t, i) => `
-                <div onclick="gerenciarItem(${i})" class="flex justify-between items-center border-b border-white/5 pb-5 card-entry">
-                    <div class="space-y-1">
-                        <p class="text-[11px] font-black tracking-wider uppercase">${t.recorrente ? '🔄 ' : ''}${t.nome}</p>
-                        <p class="text-[8px] opacity-30 font-bold uppercase">${new Date(t.data).toLocaleDateString()}</p>
-                    </div>
+                <div onclick="gerenciarItem(${i})" class="flex justify-between items-center border-b border-white/5 pb-5">
+                    <div><p class="text-[11px] font-black uppercase">${t.recorrente ? '🔄 ' : ''}${t.nome}</p></div>
                     <p class="text-[13px] font-black ${t.tipo==='r'?'text-emerald-500':'text-rose-400'}">R$ ${t.valor.toLocaleString('pt-BR', {minimumFractionDigits:2})}</p>
                 </div>
-            `).join('') || '<p class="text-center text-[10px] opacity-20 py-10 font-bold italic uppercase">NADA LANÇADO AINDA</p>';
+            `).join('') || '<p class="text-center opacity-20 py-10 italic uppercase">NADA LANÇADO</p>';
 
-            // SONHOS
             document.getElementById('lista-objetivos').innerHTML = db.objetivos.map((o, i) => `
-                <div onclick="gerenciarObj(${i})" class="min-w-[200px] glass p-7 rounded-[40px] border-b-8 border-indigo-600 active:scale-95 transition-all">
-                    <p class="text-[9px] text-indigo-400 font-black mb-1">${o.nome}</p>
+                <div onclick="gerenciarObj(${i})" class="min-w-[200px] glass p-7 rounded-[40px] border-b-8 border-indigo-600">
+                    <p class="text-[9px] text-indigo-400 font-black mb-1 uppercase">${o.nome}</p>
                     <p class="text-xl font-black">R$ ${o.atual.toLocaleString('pt-BR')}</p>
-                    <div class="w-full bg-white/5 h-1.5 rounded-full mt-4 overflow-hidden">
-                        <div class="bg-indigo-500 h-full transition-all duration-1000" style="width: ${Math.min((o.atual/o.meta)*100, 100)}%"></div>
-                    </div>
+                    <div class="w-full bg-white/5 h-1.5 rounded-full mt-4 overflow-hidden"><div class="bg-indigo-500 h-full" style="width: ${Math.min((o.atual/o.meta)*100, 100)}%"></div></div>
                 </div>
-            `).join('') || '<div class="w-full p-10 text-center glass rounded-[40px] opacity-20 text-[9px] font-black italic uppercase">NENHUM SONHO CADASTRADO</div>';
-
-            // MENTORIA
-            document.getElementById('conteudo-mentoria').innerHTML = mentoria.map(d => `
-                <div class="glass p-7 rounded-[40px] border-l-4 border-indigo-600">
-                    <h3 class="text-indigo-400 font-black text-[10px] mb-3 tracking-[0.2em]">${d.t}</h3>
-                    <p class="text-[12px] normal-case opacity-70 leading-relaxed font-semibold uppercase">${d.d}</p>
-                </div>
-            `).join('');
+            `).join('') || '<p class="opacity-20 text-[9px] font-black italic uppercase">SEM OBJETIVOS</p>';
             
-            localStorage.setItem('clarity_v_ultimate_gold', JSON.stringify(db));
+            localStorage.setItem('clarity_v_ultimate_gold_fix', JSON.stringify(db));
         }
 
         function gerenciarItem(i) {
-            const acao = confirm("ESCOLHA UMA AÇÃO:\n\nOK = EDITAR DADOS\nCANCELAR = EXCLUIR DEFINITIVO");
+            const acao = confirm("EDITAR LANÇAMENTO?");
             if (acao) {
-                const n = prompt("NOME DO LANÇAMENTO:", db.transacoes[i].nome);
-                const v = parseFloat(prompt("VALOR R$:", db.transacoes[i].valor));
+                const n = prompt("NOME:", db.transacoes[i].nome);
+                const v = parseFloat(prompt("VALOR:", db.transacoes[i].valor));
                 if(n) db.transacoes[i].nome = n.toUpperCase();
                 if(!isNaN(v)) db.transacoes[i].valor = v;
-            } else { if(confirm("DESEJA REALMENTE APAGAR?")) db.transacoes.splice(i,1); }
+            } else { if(confirm("EXCLUIR?")) db.transacoes.splice(i,1); }
             render();
         }
 
         function gerenciarObj(i) {
-            const acao = confirm("EDITAR OBJETIVO:\n\nOK = EDITAR VALORES\nCANCELAR = EXCLUIR SONHO");
+            const acao = confirm("EDITAR SONHO?");
             if (acao) {
-                const n = prompt("NOME DO SONHO:", db.objetivos[i].nome);
-                const a = parseFloat(prompt("VALOR JÁ GUARDADO:", db.objetivos[i].atual));
+                const n = prompt("NOME:", db.objetivos[i].nome);
+                const a = parseFloat(prompt("JÁ GUARDADO:", db.objetivos[i].atual));
                 const m = parseFloat(prompt("META TOTAL:", db.objetivos[i].meta));
                 if(n) db.objetivos[i].nome = n.toUpperCase();
                 if(!isNaN(a)) db.objetivos[i].atual = a;
                 if(!isNaN(m)) db.objetivos[i].meta = m;
-            } else { if(confirm("REMOVER ESSE SONHO?")) db.objetivos.splice(i,1); }
+            } else { if(confirm("EXCLUIR?")) db.objetivos.splice(i,1); }
             render();
         }
 
         let tipoAberto = '';
-        function abrirModal(t) { tipoAberto = t; document.getElementById('modal-titulo').innerText = t==='receita'?'NOVA RECEITA':'NOVO GASTO'; document.getElementById('modal-transacao').classList.remove('hidden'); }
+        function abrirModal(t) { tipoAberto = t; document.getElementById('modal-transacao').classList.remove('hidden'); }
         function fecharModal() { document.getElementById('modal-transacao').classList.add('hidden'); }
-        
         function salvarTransacao() {
-            const n = document.getElementById('input-desc'); 
-            const v = document.getElementById('input-valor'); 
-            const r = document.getElementById('input-recorrente');
-            const valorNum = parseFloat(v.value.replace(',', '.'));
-            
-            if(n.value && !isNaN(valorNum)) {
-                db.transacoes.push({ nome: n.value.toUpperCase(), valor: valorNum, tipo: tipoAberto, recorrente: r.checked, data: new Date() });
+            const n = document.getElementById('input-desc'); const v = document.getElementById('input-valor'); const r = document.getElementById('input-recorrente');
+            if(n.value && v.value) {
+                db.transacoes.push({ nome: n.value.toUpperCase(), valor: parseFloat(v.value), tipo: tipoAberto, recorrente: r.checked, data: new Date() });
                 n.value = ''; v.value = ''; r.checked = false; fecharModal(); render();
-            } else { alert("PREENCHA NOME E VALOR CORRETAMENTE."); }
+            }
         }
-
-        function abrirModalObjetivo() { 
-            const n = prompt("QUAL O NOME DO SEU SONHO?"); 
-            const m = parseFloat(prompt("QUAL O VALOR TOTAL DA META?")); 
-            if(n && !isNaN(m)) { db.objetivos.push({nome:n.toUpperCase(), meta:m, atual:0}); render(); } 
-        }
-
+        function abrirModalObjetivo() { const n = prompt("NOME DO SONHO?"); const m = parseFloat(prompt("META?")); if(n && m) { db.objetivos.push({nome:n.toUpperCase(), meta:m, atual:0}); render(); } }
         function abrirConfig() { fecharAbas(); document.getElementById('view-principal').classList.add('hidden'); document.getElementById('view-config').classList.remove('hidden'); }
         function abrirMentoria() { fecharAbas(); document.getElementById('view-principal').classList.add('hidden'); document.getElementById('view-mentoria').classList.remove('hidden'); }
         function fecharAbas() { document.getElementById('view-principal').classList.remove('hidden'); document.getElementById('view-config').classList.add('hidden'); document.getElementById('view-mentoria').classList.add('hidden'); window.scrollTo(0,0); }
         function salvarNome() { db.nome = document.getElementById('input-nome-user').value.toUpperCase(); render(); }
-        function validarSenha() { if(document.getElementById('senha-licenca').value === SENHA_MESTRA) { db.dataCriacao = new Date().getTime(); document.getElementById('tela-licenca').classList.add('hidden'); render(); } else { alert("SENHA INCORRETA."); } }
-        function resetaTudo() { if(confirm("ATENÇÃO: ISSO APAGARÁ TODOS OS SEUS DADOS! CONTINUAR?")) { localStorage.clear(); location.reload(); } }
-        function exportarBackup() { navigator.clipboard.writeText(JSON.stringify(db)); alert("CÓDIGO DE BACKUP COPIADO! SALVE EM UM LOCAL SEGURO."); }
+        function validarSenha() { if(document.getElementById('senha-licenca').value === SENHA_MESTRA) { db.dataCriacao = new Date().getTime(); document.getElementById('tela-licenca').classList.add('hidden'); render(); } else alert("ERRO!"); }
+        function resetaTudo() { if(confirm("APAGAR TUDO?")) { localStorage.clear(); location.reload(); } }
+        function exportarBackup() { navigator.clipboard.writeText(JSON.stringify(db)); alert("COPIADO!"); }
 
-        // INICIALIZAÇÃO
         render();
     </script>
 </body>
