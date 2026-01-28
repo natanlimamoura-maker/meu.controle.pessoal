@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#003366">
     <link rel="manifest" href="manifest.json">
-    <title>Finanças Pro - Gestão Completa</title>
+    <title>Finanças Pro - Oficial</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root { --primary: #003366; --accent: #007BFF; --bg: #F8F9FA; --white: #FFFFFF; --text: #2D3436; --danger: #FF4757; --success: #2ED573; --warning: #FFA502; }
         body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; color: var(--text); }
         
+        /* TELA DE BLOQUEIO */
         #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); color: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .pin-dots { display: flex; gap: 15px; margin: 20px 0; }
         .dot { width: 15px; height: 15px; border: 2px solid white; border-radius: 50%; }
@@ -18,33 +19,32 @@
         .keypad { display: grid; grid-template-columns: repeat(3, 75px); gap: 15px; text-align: center; }
         .key { width: 75px; height: 75px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; }
 
-        header { background: var(--primary); color: white; padding: 25px 20px; border-radius: 0 0 25px 25px; box-shadow: 0 4px 10px rgba(0,0,0,0.15); }
+        header { background: var(--primary); color: white; padding: 25px 20px; border-radius: 0 0 25px 25px; }
         .container { padding: 15px; max-width: 600px; margin: auto; }
         .card { background: var(--white); border-radius: 15px; padding: 18px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
         
         .tab-bar { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -2px 15px rgba(0,0,0,0.1); z-index: 100; }
-        .tab-item { border: none; background: none; color: #A4B0BE; font-size: 0.75rem; font-weight: bold; display: flex; flex-direction: column; align-items: center; }
+        .tab-item { border: none; background: none; color: #A4B0BE; font-size: 0.75rem; font-weight: bold; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
         .tab-item.active { color: var(--primary); }
 
-        .content-section { display: none; }
+        .content-section { display: none; animation: fadeIn 0.3s ease; }
         .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         label { display: block; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; color: var(--primary); }
-        input, select { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #E0E0E0; border-radius: 10px; box-sizing: border-box; }
+        input, select { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #E0E0E0; border-radius: 10px; box-sizing: border-box; font-size: 1rem; }
         .btn-main { background: var(--primary); color: white; border: none; width: 100%; padding: 14px; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        .btn-add { background: var(--success); margin-bottom: 15px; }
         
         .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #F1F1F1; }
-        .item-row b { font-size: 0.9rem; }
         .status-badge { font-size: 0.65rem; padding: 3px 8px; border-radius: 20px; color: white; font-weight: bold; }
-        .renda-tag { background: var(--success); margin-left: 5px; }
-        .gasto-tag { background: var(--danger); }
+        .bg-success { background: var(--success); }
+        .bg-danger { background: var(--danger); }
     </style>
 </head>
 <body>
 
 <div id="lock-screen">
-    <h2 id="pin-label">Acesso Restrito</h2>
+    <h2 id="pin-label">Digite seu PIN</h2>
     <div class="pin-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     <div class="keypad">
         <div class="key" onclick="pressKey(1)">1</div><div class="key" onclick="pressKey(2)">2</div><div class="key" onclick="pressKey(3)">3</div>
@@ -56,67 +56,66 @@
 
 <header>
     <h1 style="margin:0; font-size: 1.3rem;">Finanças Pro</h1>
-    <div id="msg-boas-vindas" style="font-size: 0.8rem; margin-top:5px; opacity: 0.9;">Gestão Ativa</div>
+    <div id="resumo-total" style="font-size: 0.8rem; margin-top:5px; opacity: 0.9;">Carregando...</div>
 </header>
 
 <div class="container">
     <section id="resumo" class="content-section active">
         <div class="card">
             <div style="display: flex; justify-content: space-between;">
-                <div><small>Total Ganhos</small><br><b id="txt-ganhos" style="color:var(--success); font-size: 1.2rem;">R$ 0,00</b></div>
-                <div style="text-align:right"><small>Saldo Livre</small><br><b id="txt-saldo" style="color:var(--primary); font-size: 1.2rem;">R$ 0,00</b></div>
+                <div><small>Ganhos</small><br><b id="txt-ganhos" style="color:var(--success)">R$ 0,00</b></div>
+                <div style="text-align:right"><small>Gastos</small><br><b id="txt-gastos" style="color:var(--danger)">R$ 0,00</b></div>
             </div>
-            <hr style="opacity: 0.1; margin: 15px 0;">
-            <div style="display: flex; justify-content: space-between;">
-                <div><small>Total Gastos</small><br><b id="txt-gastos" style="color:var(--danger)">R$ 0,00</b></div>
-                <div style="text-align:right"><small>Atrasados</small><br><b id="txt-atrasado" style="color:var(--warning)">R$ 0,00</b></div>
+            <div style="text-align: center; margin-top: 15px; border-top: 1px solid #eee; padding-top: 10px;">
+                <small>Saldo Disponível</small><br>
+                <b id="txt-saldo" style="font-size: 1.5rem; color: var(--primary);">R$ 0,00</b>
             </div>
         </div>
-
-        <div class="card" style="height: 180px;"><canvas id="chartGeral"></canvas></div>
-
-        <div class="card">
-            <h3>Entradas de Dinheiro</h3>
-            <div id="lista-ganhos"></div>
-        </div>
+        <div class="card" style="height: 200px;"><canvas id="chartGeral"></canvas></div>
     </section>
 
     <section id="lancamentos" class="content-section">
-        <div class="card" style="border-top: 5px solid var(--success);">
-            <h2>Adicionar Ganho (Renda)</h2>
-            <input type="text" id="r-desc" placeholder="Ex: Salário, Freelance">
+        <div class="card" style="border-left: 5px solid var(--success);">
+            <h2>Nova Entrada (Renda)</h2>
+            <input type="text" id="r-desc" placeholder="Ex: Salário, Venda...">
             <input type="number" id="r-valor" placeholder="Valor R$">
             <select id="r-tipo">
-                <option value="fixa">Renda Fixa (Mensal)</option>
-                <option value="variavel">Renda Variável (Extra)</option>
+                <option value="Fixa">Renda Fixa</option>
+                <option value="Variável">Renda Variável</option>
             </select>
-            <button class="btn-main btn-add" onclick="salvarRenda()">+ Adicionar Ganho</button>
+            <button class="btn-main" style="background:var(--success)" onclick="salvarRenda()">Adicionar Renda</button>
         </div>
 
-        <div class="card" style="border-top: 5px solid var(--danger);">
-            <h2>Adicionar Gasto</h2>
-            <input type="text" id="g-desc" placeholder="Ex: Aluguel, Mercado">
+        <div class="card" style="border-left: 5px solid var(--danger);">
+            <h2>Novo Gasto</h2>
+            <input type="text" id="g-desc" placeholder="Ex: Aluguel, Luz...">
             <input type="number" id="g-valor" placeholder="Valor R$">
             <input type="number" id="g-venc" placeholder="Dia do Vencimento (1-31)">
-            <button class="btn-main" onclick="salvarGasto()">- Lançar Gasto</button>
+            <button class="btn-main" style="background:var(--danger)" onclick="salvarGasto()">Lançar Gasto</button>
         </div>
     </section>
 
-    <section id="objetivos" class="content-section">
+    <section id="config" class="content-section">
         <div class="card">
-            <h2>Metas</h2>
-            <input type="text" id="obj-nome" placeholder="Ex: Comprar uma Moto">
-            <input type="number" id="obj-valor" placeholder="Quanto custa?">
-            <button class="btn-main" style="background:var(--accent)" onclick="salvarObjetivo()">Salvar Objetivo</button>
-            <div id="card-obj" style="display:none; margin-top:15px; border-top:1px solid #eee; padding-top:10px;">
-                <b id="view-obj-nome"></b><br>
-                <small id="view-obj-previsao"></small>
+            <h2>🎯 Objetivos</h2>
+            <input type="text" id="obj-nome" placeholder="Ex: Viagem">
+            <input type="number" id="obj-valor" placeholder="Valor Alvo">
+            <button class="btn-main" style="background:var(--accent)" onclick="salvarObjetivo()">Salvar Meta</button>
+            <div id="box-meta" style="display:none; margin-top:15px; background:#f0f7ff; padding:10px; border-radius:10px;">
+                <b id="v-obj-nome"></b><br>
+                <small id="v-obj-prev"></small>
             </div>
         </div>
 
         <div class="card">
-            <h2>Segurança</h2>
-            <button class="btn-main" style="background:#eee; color:#333; font-size:0.8rem" onclick="alterarPin()">Alterar Senha do App</button>
+            <h2>🔐 Segurança</h2>
+            <label>ALTERAR PIN DE ACESSO</label>
+            <button class="btn-main" style="background:#636e72" onclick="alterarPin()">Alterar Senha de 4 Dígitos</button>
+        </div>
+
+        <div class="card">
+            <h2>📊 Histórico de Entradas</h2>
+            <div id="lista-entradas"></div>
         </div>
     </section>
 </div>
@@ -124,11 +123,11 @@
 <nav class="tab-bar">
     <div class="tab-item active" onclick="nav('resumo', this)"><span>🏠</span>Home</div>
     <div class="tab-item" onclick="nav('lancamentos', this)"><span>💸</span>Lançar</div>
-    <div class="tab-item" onclick="nav('objetivos', this)"><span>🎯</span>Metas</div>
+    <div class="tab-item" onclick="nav('config', this)"><span>⚙️</span>Config</div>
 </nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('financas_v9')) || { pin: null, ganhos: [], gastos: [], objetivo: null };
+    let db = JSON.parse(localStorage.getItem('financas_final_v10')) || { pin: null, ganhos: [], gastos: [], objetivo: null };
     let currentPinInput = "";
 
     // PIN
@@ -151,9 +150,9 @@
     function alterarPin() {
         const atual = prompt("Digite o PIN atual:");
         if(atual === db.pin) {
-            const novo = prompt("Novo PIN (4 dígitos):");
-            if(novo && novo.length === 4) { db.pin = novo; gravar(); alert("Alterado!"); }
-        }
+            const novo = prompt("Novo PIN (4 números):");
+            if(novo && novo.length === 4) { db.pin = novo; gravar(); alert("PIN alterado!"); }
+        } else { alert("Senha incorreta!"); }
     }
 
     // NAVEGAÇÃO
@@ -163,7 +162,7 @@
         document.getElementById(id).classList.add('active'); el.classList.add('active');
     }
 
-    // SALVAR GANHO
+    // DADOS
     function salvarRenda() {
         const desc = document.getElementById('r-desc').value;
         const valor = parseFloat(document.getElementById('r-valor').value);
@@ -175,7 +174,6 @@
         }
     }
 
-    // SALVAR GASTO
     function salvarGasto() {
         const desc = document.getElementById('g-desc').value;
         const valor = parseFloat(document.getElementById('g-valor').value);
@@ -188,8 +186,7 @@
     }
 
     function excluirGasto(id) { if(confirm("Excluir?")) { db.gastos = db.gastos.filter(x => x.id !== id); gravar(); } }
-    function excluirGanho(id) { if(confirm("Excluir ganho?")) { db.ganhos = db.ganhos.filter(x => x.id !== id); gravar(); } }
-    function togglePago(id) { const g = db.gastos.find(x => x.id === id); if(g) { g.pago = !g.pago; gravar(); } }
+    function excluirGanho(id) { if(confirm("Excluir renda?")) { db.ganhos = db.ganhos.filter(x => x.id !== id); gravar(); } }
 
     function salvarObjetivo() {
         const nome = document.getElementById('obj-nome').value;
@@ -197,32 +194,32 @@
         if(nome && valor) { db.objetivo = { nome, valor }; gravar(); }
     }
 
-    function gravar() { localStorage.setItem('financas_v9', JSON.stringify(db)); atualizarUI(); }
+    function gravar() { localStorage.setItem('financas_final_v10', JSON.stringify(db)); atualizarUI(); }
 
     function atualizarUI() {
         const totalGanhos = db.ganhos.reduce((s, g) => s + g.valor, 0);
         const totalGastos = db.gastos.reduce((s, g) => s + g.valor, 0);
         const saldo = totalGanhos - totalGastos;
-        const hoje = new Date().getDate();
 
         document.getElementById('txt-ganhos').innerText = `R$ ${totalGanhos.toFixed(2)}`;
         document.getElementById('txt-gastos').innerText = `R$ ${totalGastos.toFixed(2)}`;
         document.getElementById('txt-saldo').innerText = `R$ ${saldo.toFixed(2)}`;
+        document.getElementById('resumo-total').innerText = saldo >= 0 ? "Orçamento sob controle" : "Atenção: Gasto maior que renda!";
 
-        // Lista de Ganhos no Início
-        const listaGanhos = document.getElementById('lista-ganhos');
-        listaGanhos.innerHTML = db.ganhos.map(g => `
+        // Lista de Ganhos na aba Config
+        const listaEntradas = document.getElementById('lista-entradas');
+        listaEntradas.innerHTML = db.ganhos.map(g => `
             <div class="item-row">
-                <div><b>${g.desc}</b> <span class="status-badge renda-tag">${g.tipo}</span></div>
+                <div><b>${g.desc}</b> (${g.tipo})</div>
                 <div>R$ ${g.valor.toFixed(2)} <button onclick="excluirGanho(${g.id})" style="border:none; background:none;">🗑️</button></div>
             </div>
-        `).join('') || '<small>Nenhuma renda cadastrada.</small>';
+        `).join('') || '<small>Sem rendas.</small>';
 
         if(db.objetivo) {
-            document.getElementById('card-obj').style.display = "block";
-            document.getElementById('view-obj-nome').innerText = db.objetivo.nome;
+            document.getElementById('box-meta').style.display = "block";
+            document.getElementById('v-obj-nome').innerText = db.objetivo.nome;
             const meses = saldo > 0 ? Math.ceil(db.objetivo.valor / saldo) : "∞";
-            document.getElementById('view-obj-previsao').innerText = `Conquista em aprox. ${meses} meses.`;
+            document.getElementById('v-obj-prev').innerText = `Previsto para ${meses} meses.`;
         }
         renderChart(totalGastos, Math.max(0, saldo));
     }
