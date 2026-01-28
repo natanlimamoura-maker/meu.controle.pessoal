@@ -1,225 +1,281 @@
 <!DOCTYPE html>
-<html lang="PT-BR">
+<html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CLARITY PRO MASTER</title>
-    <link rel="manifest" href="./manifest.json">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Finanças Pro - Segurança Total</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        :root { --bg: #020617; --card: rgba(30, 41, 59, 0.6); }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg); color: #f8fafc; text-transform: uppercase; transition: all 0.3s ease; overflow-x: hidden; -webkit-tap-highlight-color: transparent; }
-        .glass { background: var(--card); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.05); }
-        .hide-scroll::-webkit-scrollbar { display: none; }
-        input { text-transform: uppercase; background: transparent; }
-        .btn-master { background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%); }
+        :root {
+            --primary: #003366; --accent: #007BFF; --bg: #F8F9FA;
+            --white: #FFFFFF; --text: #2D3436; --danger: #FF4757; --success: #2ED573;
+        }
+
+        body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; }
+
+        /* TELA DE BLOQUEIO */
+        #lock-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--primary); color: white; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        .pin-dots { display: flex; gap: 15px; margin: 20px 0; }
+        .dot { width: 15px; height: 15px; border: 2px solid white; border-radius: 50%; }
+        .dot.filled { background: white; }
+
+        .keypad { display: grid; grid-template-columns: repeat(3, 75px); gap: 15px; text-align: center; }
+        .key { 
+            width: 75px; height: 75px; border: 1px solid rgba(255,255,255,0.2); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; cursor: pointer;
+        }
+        .key:active { background: rgba(255,255,255,0.2); }
+
+        /* INTERFACE */
+        header { background: var(--primary); color: white; padding: 25px 20px; border-radius: 0 0 25px 25px; }
+        .container { padding: 15px; max-width: 600px; margin: auto; }
+        .card { background: var(--white); border-radius: 15px; padding: 18px; margin-bottom: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        
+        .tab-bar { position: fixed; bottom: 0; width: 100%; background: var(--white); display: flex; justify-content: space-around; padding: 15px 0; box-shadow: 0 -2px 15px rgba(0,0,0,0.1); }
+        .tab-item { border: none; background: none; color: #A4B0BE; font-size: 0.75rem; font-weight: bold; display: flex; flex-direction: column; align-items: center; }
+        .tab-item.active { color: var(--primary); }
+
+        .content-section { display: none; }
+        .content-section.active { display: block; }
+
+        input { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #E0E0E0; border-radius: 10px; box-sizing: border-box; }
+        .btn-main { background: var(--primary); color: white; border: none; width: 100%; padding: 14px; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .btn-danger { background: #E0E0E0; color: #333; font-size: 0.8rem; }
+        
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #F1F1F1; }
     </style>
 </head>
-<body class="pb-10">
+<body>
 
-    <div id="tela-licenca" class="fixed inset-0 bg-slate-950 flex flex-col items-center justify-center p-8 text-center hidden z-[1000]">
-        <h2 class="text-3xl font-black mb-6 italic text-indigo-500 uppercase">LICENÇA EXPIRADA</h2>
-        <input type="number" id="senha-licenca" placeholder="SENHA" class="bg-white/5 border border-white/10 p-5 rounded-3xl w-full max-w-xs text-center mb-4 text-white text-xl font-bold outline-none">
-        <button onclick="validarSenha()" class="bg-indigo-600 p-5 rounded-3xl w-full max-w-xs font-black uppercase">RENOVAR ACESSO</button>
+<div id="lock-screen">
+    <h2 id="pin-label">Digite seu PIN</h2>
+    <div class="pin-dots">
+        <div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div>
     </div>
-
-    <header class="p-8 pt-12 text-center relative border-b border-white/5 bg-gradient-to-b from-indigo-500/5 to-transparent">
-        <button onclick="abrirConfig()" class="absolute top-10 right-8 text-2xl opacity-40 p-2">⚙️</button>
-        <p id="mes-atual" class="text-[11px] font-extrabold text-indigo-400 tracking-[0.2em] mb-2 italic">---</p>
-        <p class="text-[9px] opacity-40 font-bold mb-1">VALOR EM CAIXA ACUMULADO</p>
-        <h1 id="saldo-geral" class="text-5xl font-black tracking-tighter italic">R$ 0,00</h1>
-    </header>
-
-    <main id="view-principal" class="p-6 space-y-10 max-w-lg mx-auto">
-        <div onclick="abrirMentoria()" class="w-full btn-master p-6 rounded-[35px] flex items-center justify-between shadow-2xl shadow-indigo-500/20 cursor-pointer active:scale-95 transition-all">
-            <div class="text-left">
-                <p class="text-[9px] font-black text-white/60 tracking-widest uppercase">ESTRATÉGIA</p>
-                <h2 class="text-lg font-black text-white italic uppercase">CENTRAL DO MESTRE 🧠</h2>
-            </div>
-            <span class="text-[10px] bg-white/20 px-4 py-2 rounded-full font-bold">VER</span>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4">
-            <button onclick="abrirModal('receita')" class="bg-emerald-500/10 border border-emerald-500/20 p-7 rounded-[35px] text-emerald-500 font-black text-xs uppercase">+ GANHEI</button>
-            <button onclick="abrirModal('gasto')" class="bg-rose-500/10 border border-rose-500/20 p-7 rounded-[35px] text-rose-400 font-black text-xs uppercase">- GASTEI</button>
-        </div>
-
-        <section>
-            <div class="flex justify-between items-center mb-5">
-                <h2 class="font-black text-[11px] opacity-60 italic tracking-widest">OBJETIVOS</h2>
-                <button onclick="abrirModalObjetivo()" class="text-[10px] font-black text-indigo-500">+ NOVO</button>
-            </div>
-            <div id="lista-objetivos" class="flex gap-4 overflow-x-auto hide-scroll pb-2"></div>
-        </section>
-
-        <section class="glass rounded-[40px] p-7">
-            <h2 class="text-[10px] font-black opacity-30 tracking-[0.3em] mb-8 text-center italic uppercase">HISTÓRICO (EDITÁVEL)</h2>
-            <div id="extrato" class="space-y-6"></div>
-        </section>
-    </main>
-
-    <main id="view-mentoria" class="hidden p-8 space-y-8 max-w-lg mx-auto min-h-screen pb-40">
-        <button onclick="fecharAbas()" class="bg-white/5 p-4 rounded-2xl text-indigo-400 font-black text-[10px]">← VOLTAR AO PAINEL</button>
-        <h2 class="text-3xl font-black italic text-indigo-500 uppercase">MANUAL DA RIQUEZA</h2>
-        <div class="space-y-5">
-            <div class="glass p-7 rounded-[40px] border-l-4 border-indigo-600 uppercase">
-                <h3 class="text-indigo-400 font-black text-[10px] mb-3">01. REGRA 50/30/20</h3>
-                <p class="text-[12px] opacity-70 leading-relaxed font-semibold">50% ESSENCIAL, 30% ESTILO DE VIDA, 20% INVESTIMENTOS. "NÃO ECONOMIZE O QUE SOBRA DEPOIS DE GASTAR, GASTE O QUE SOBRA DEPOIS DE ECONOMIZAR."</p>
-            </div>
-            <div class="glass p-7 rounded-[40px] border-l-4 border-emerald-600 uppercase">
-                <h3 class="text-emerald-400 font-black text-[10px] mb-3">02. AMORTIZAÇÃO</h3>
-                <p class="text-[12px] opacity-70 leading-relaxed font-semibold">PAGUE SEMPRE A ÚLTIMA PARCELA. CADA REAL ADIANTADO ELIMINA JUROS DO BANCO.</p>
-            </div>
-            <div class="glass p-7 rounded-[40px] border-l-4 border-rose-600 uppercase">
-                <h3 class="text-rose-400 font-black text-[10px] mb-3">03. STATUS VS RIQUEZA</h3>
-                <p class="text-[12px] opacity-70 leading-relaxed font-semibold">PARE DE IMPRESSIONAR QUEM VOCÊ NÃO GOSTA COM O DINHEIRO QUE VOCÊ NÃO TEM.</p>
-            </div>
-        </div>
-    </main>
-
-    <main id="view-config" class="hidden p-8 space-y-8 max-w-lg mx-auto min-h-screen">
-        <button onclick="fecharAbas()" class="text-indigo-500 font-black text-[10px]">← VOLTAR</button>
-        <h2 class="text-3xl font-black italic uppercase">AJUSTES</h2>
-        <div class="glass p-7 rounded-[35px] space-y-5">
-            <input type="text" id="input-nome-user" onchange="salvarNome()" class="w-full bg-white/5 border border-white/10 p-4 rounded-2xl outline-none text-sm font-bold uppercase" placeholder="SEU NOME">
-            <div id="status-licenca-texto" class="text-[10px] font-black text-indigo-400 uppercase">---</div>
-            <button onclick="exportarBackup()" class="w-full p-4 bg-white/5 rounded-2xl text-[11px] font-black uppercase">COPIAR BACKUP</button>
-            <button onclick="resetaTudo()" class="w-full p-4 bg-rose-500/10 rounded-2xl text-[11px] font-black text-rose-500 uppercase">LIMPAR APP</button>
-        </div>
-    </main>
-
-    <div id="modal-transacao" class="fixed inset-0 bg-slate-950/95 hidden flex items-center justify-center p-6 z-[900]">
-        <div class="glass w-full max-w-sm p-8 rounded-[40px] space-y-6">
-            <h3 class="text-xl font-black text-center italic uppercase" id="modal-titulo">LANÇAMENTO</h3>
-            <input type="text" id="input-desc" placeholder="DESCRIÇÃO" class="w-full bg-white/5 border border-white/10 p-5 rounded-2xl outline-none text-white font-bold uppercase">
-            <input type="number" id="input-valor" inputmode="decimal" placeholder="VALOR R$" class="w-full bg-white/5 border border-white/10 p-5 rounded-3xl outline-none text-3xl font-black text-white">
-            <label class="flex items-center gap-4 p-2 cursor-pointer">
-                <input type="checkbox" id="input-recorrente" class="w-6 h-6 rounded-lg accent-indigo-600">
-                <span class="text-[10px] font-black opacity-70 uppercase">REPETIR TODO MÊS</span>
-            </label>
-            <div class="flex gap-4">
-                <button onclick="fecharModal()" class="flex-1 text-slate-500 font-extrabold text-[11px] uppercase">VOLTAR</button>
-                <button onclick="salvarTransacao()" class="flex-1 bg-indigo-600 p-5 rounded-[25px] font-black text-[11px] uppercase">SALVAR</button>
-            </div>
-        </div>
+    <div class="keypad" id="main-keypad">
+        <div class="key" onclick="pressKey(1)">1</div><div class="key" onclick="pressKey(2)">2</div><div class="key" onclick="pressKey(3)">3</div>
+        <div class="key" onclick="pressKey(4)">4</div><div class="key" onclick="pressKey(5)">5</div><div class="key" onclick="pressKey(6)">6</div>
+        <div class="key" onclick="pressKey(7)">7</div><div class="key" onclick="pressKey(8)">8</div><div class="key" onclick="pressKey(9)">9</div>
+        <div class="key" onclick="clearPin()">C</div><div class="key" onclick="pressKey(0)">0</div><div class="key" onclick="clearPin()">⌫</div>
     </div>
+</div>
 
-    <script>
-        const meses = ["JANEIRO", "FEVEREIRO", "MARÇO", "ABRIL", "MAIO", "JUNHO", "JULHO", "AGOSTO", "SETEMBRO", "OUTUBRO", "NOVEMBRO", "DEZEMBRO"];
-        const SENHA_MESTRA = "0907";
+<header>
+    <h1 style="margin:0; font-size: 1.4rem;">Finanças Pro</h1>
+    <div id="status-alerta" style="margin-top:5px; font-size: 0.8rem;">Proteção Ativa 🔒</div>
+</header>
 
-        let db = JSON.parse(localStorage.getItem('clarity_v_fixed_final')) || {
-            nome: "MESTRE", mesReferencia: new Date().getMonth(),
-            anoReferencia: new Date().getFullYear(), saldoAnterior: 0, 
-            transacoes: [], objetivos: [], dataCriacao: new Date().getTime()
-        };
+<div class="container">
+    <section id="resumo" class="content-section active">
+        <div class="card">
+            <label>SUA RENDA FIXA (EDITÁVEL)</label>
+            <input type="number" id="renda-input" placeholder="R$ 0,00" oninput="salvarRenda()">
+            <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                <div><small>Gastos</small><br><b id="txt-gasto" style="color:var(--danger)">R$ 0</b></div>
+                <div style="text-align:right"><small>Livre</small><br><b id="txt-saldo" style="color:var(--success)">R$ 0</b></div>
+            </div>
+        </div>
+        <div class="card"><canvas id="chartGeral" height="150"></canvas></div>
+    </section>
 
-        function render() {
-            document.getElementById('mes-atual').innerText = `${meses[db.mesReferencia]} ${db.anoReferencia}`;
-            
-            // Licença
-            const restam = Math.ceil((30 * 24 * 60 * 60 * 1000 - (new Date().getTime() - db.dataCriacao)) / (1000 * 60 * 60 * 24));
-            document.getElementById('status-licenca-texto').innerText = `LICENÇA: ${restam} DIAS RESTANTES`;
-            if(restam <= 0) document.getElementById('tela-licenca').classList.remove('hidden');
+    <section id="lancamentos" class="content-section">
+        <div class="card">
+            <h2>Lançar Movimentação</h2>
+            <input type="text" id="g-desc" placeholder="Ex: Combustível">
+            <input type="number" id="g-valor" placeholder="Valor R$">
+            <button class="btn-main" onclick="salvarGasto()">Confirmar</button>
+        </div>
+        <div class="card">
+            <h2>Últimos Gastos</h2>
+            <div id="lista-gastos"></div>
+        </div>
+    </section>
 
-            // CÁLCULO DE SALDO (CORRIGIDO)
-            const tRec = db.transacoes.filter(t => t.tipo === 'r').reduce((acc, t) => acc + t.valor, 0);
-            const tGas = db.transacoes.filter(t => t.tipo === 'g').reduce((acc, t) => acc + t.valor, 0);
-            const tObj = db.objetivos.reduce((acc, o) => acc + (o.atual || 0), 0);
-            const total = (db.saldoAnterior || 0) + tRec - tGas - tObj;
+    <section id="objetivos" class="content-section">
+        <div class="card">
+            <h2>Metas</h2>
+            <input type="text" id="obj-nome" placeholder="Nome do Objetivo">
+            <input type="number" id="obj-valor" placeholder="Valor Alvo R$">
+            <button class="btn-main" style="background:var(--accent)" onclick="salvarObjetivo()">Salvar Meta</button>
+        </div>
 
-            const sElem = document.getElementById('saldo-geral');
-            sElem.innerText = `R$ ${total.toLocaleString('pt-BR', {minimumFractionDigits: 2})}`;
-            sElem.className = total < 0 ? "text-5xl font-black tracking-tighter text-rose-500 italic" : "text-5xl font-black tracking-tighter text-white italic";
+        <div id="card-obj" class="card" style="display:none; border-top: 4px solid var(--accent);">
+            <h3 id="view-obj-nome" style="margin:0"></h3>
+            <p id="view-obj-previsao" style="color:var(--accent)"></p>
+        </div>
 
-            // EXTRATO
-            document.getElementById('extrato').innerHTML = db.transacoes.sort((a,b)=>new Date(b.data)-new Date(a.data)).map((t, i) => `
-                <div onclick="gerenciarItem(${i})" class="flex justify-between items-center border-b border-white/5 pb-5 active:opacity-40">
-                    <div><p class="text-[11px] font-black uppercase">${t.recorrente ? '🔄 ' : ''}${t.nome}</p></div>
-                    <p class="text-[13px] font-black ${t.tipo==='r'?'text-emerald-500':'text-rose-400'}">R$ ${t.valor.toLocaleString('pt-BR', {minimumFractionDigits:2})}</p>
-                </div>
-            `).join('') || '<p class="text-center opacity-20 py-10 italic uppercase">NADA LANÇADO</p>';
+        <div class="card">
+            <h3>Segurança</h3>
+            <button class="btn-main btn-danger" onclick="abrirTrocaSenha()">Trocar meu PIN de acesso</button>
+        </div>
+    </section>
+</div>
 
-            // OBJETIVOS
-            document.getElementById('lista-objetivos').innerHTML = db.objetivos.map((o, i) => `
-                <div onclick="gerenciarObj(${i})" class="min-w-[200px] glass p-7 rounded-[40px] border-b-8 border-indigo-600 active:scale-95 transition-all">
-                    <p class="text-[9px] text-indigo-400 font-black mb-1 uppercase">${o.nome}</p>
-                    <p class="text-xl font-black uppercase">R$ ${o.atual.toLocaleString('pt-BR')}</p>
-                    <div class="w-full bg-white/5 h-1.5 rounded-full mt-4 overflow-hidden"><div class="bg-indigo-500 h-full" style="width: ${Math.min((o.atual/o.meta)*100, 100)}%"></div></div>
-                </div>
-            `).join('');
-            
-            localStorage.setItem('clarity_v_fixed_final', JSON.stringify(db));
+<nav class="tab-bar">
+    <div class="tab-item active" onclick="nav('resumo', this)"><span>🏠</span>Home</div>
+    <div class="tab-item" onclick="nav('lancamentos', this)"><span>💰</span>Gastos</div>
+    <div class="tab-item" onclick="nav('objetivos', this)"><span>⚙️</span>Mais</div>
+</nav>
+
+<script>
+    let db = JSON.parse(localStorage.getItem('finanças_v4')) || { pin: null, renda: 0, gastos: [], objetivo: null };
+    let currentPinInput = "";
+
+    window.onload = () => {
+        if (!db.pin) {
+            document.getElementById('pin-label').innerText = "Crie um PIN de 4 dígitos";
         }
+        atualizarUI();
+    };
 
-        let tipoAberto = '';
-        function abrirModal(t) { 
-            tipoAberto = t === 'receita' ? 'r' : 'g'; 
-            document.getElementById('modal-titulo').innerText = t === 'receita' ? 'GANHEI' : 'GASTEI';
-            document.getElementById('modal-transacao').classList.remove('hidden'); 
+    // LOGICA PIN
+    function pressKey(num) {
+        if (currentPinInput.length < 4) {
+            currentPinInput += num;
+            updateDots();
         }
-        
-        function fecharModal() { document.getElementById('modal-transacao').classList.add('hidden'); }
-        
-        function salvarTransacao() {
-            const n = document.getElementById('input-desc'); 
-            const v = document.getElementById('input-valor'); 
-            const r = document.getElementById('input-recorrente');
-            if(n.value && v.value) {
-                db.transacoes.push({ 
-                    nome: n.value.toUpperCase(), 
-                    valor: parseFloat(v.value), 
-                    tipo: tipoAberto, 
-                    recorrente: r.checked, 
-                    data: new Date() 
-                });
-                n.value = ''; v.value = ''; r.checked = false; fecharModal(); render();
+        if (currentPinInput.length === 4) {
+            setTimeout(validatePin, 200);
+        }
+    }
+
+    function updateDots() {
+        const dots = document.querySelectorAll('.dot');
+        dots.forEach((dot, i) => {
+            if (i < currentPinInput.length) dot.classList.add('filled');
+            else dot.classList.remove('filled');
+        });
+    }
+
+    function validatePin() {
+        if (!db.pin) {
+            db.pin = currentPinInput;
+            gravar();
+            alert("Senha cadastrada!");
+            unlock();
+        } else if (currentPinInput === db.pin) {
+            unlock();
+        } else {
+            alert("PIN Incorreto!");
+            clearPin();
+        }
+    }
+
+    function unlock() {
+        document.getElementById('lock-screen').style.display = "none";
+        clearPin();
+    }
+
+    function clearPin() {
+        currentPinInput = "";
+        updateDots();
+    }
+
+    // TROCA DE SENHA
+    function abrirTrocaSenha() {
+        const senhaAtual = prompt("Digite o PIN ATUAL para autorizar:");
+        if (senhaAtual === db.pin) {
+            const nova = prompt("Digite o NOVO PIN de 4 dígitos:");
+            if (nova && nova.length === 4 && !isNaN(nova)) {
+                db.pin = nova;
+                gravar();
+                alert("PIN alterado com sucesso!");
+                location.reload(); // Força relogar com o novo PIN
+            } else {
+                alert("PIN inválido. Use 4 números.");
             }
+        } else {
+            alert("Senha atual incorreta.");
         }
+    }
 
-        function gerenciarItem(i) {
-            const acao = confirm("EDITAR?");
-            if (acao) {
-                const n = prompt("NOME:", db.transacoes[i].nome);
-                const v = parseFloat(prompt("VALOR:", db.transacoes[i].valor));
-                if(n) db.transacoes[i].nome = n.toUpperCase();
-                if(!isNaN(v)) db.transacoes[i].valor = v;
-            } else { if(confirm("EXCLUIR?")) db.transacoes.splice(i,1); }
-            render();
+    // NAVEGAÇÃO E DADOS
+    function nav(id, el) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        el.classList.add('active');
+    }
+
+    function salvarRenda() {
+        db.renda = parseFloat(document.getElementById('renda-input').value) || 0;
+        gravar();
+    }
+
+    function salvarGasto() {
+        const desc = document.getElementById('g-desc').value;
+        const valor = parseFloat(document.getElementById('g-valor').value);
+        if(!desc || !valor) return;
+        db.gastos.push({ id: Date.now(), desc, valor, data: new Date().toLocaleDateString('pt-BR') });
+        document.getElementById('g-desc').value = "";
+        document.getElementById('g-valor').value = "";
+        gravar();
+        nav('resumo', document.querySelector('.tab-item'));
+    }
+
+    function excluirGasto(id) {
+        if(confirm("Excluir registro?")) {
+            db.gastos = db.gastos.filter(g => g.id != id);
+            gravar();
         }
+    }
 
-        function gerenciarObj(i) {
-            const acao = confirm("EDITAR SONHO?");
-            if (acao) {
-                const n = prompt("NOME:", db.objetivos[i].nome);
-                const a = parseFloat(prompt("VALOR GUARDADO:", db.objetivos[i].atual));
-                const m = parseFloat(prompt("META:", db.objetivos[i].meta));
-                if(n) db.objetivos[i].nome = n.toUpperCase();
-                if(!isNaN(a)) db.objetivos[i].atual = a;
-                if(!isNaN(m)) db.objetivos[i].meta = m;
-            } else { if(confirm("EXCLUIR?")) db.objetivos.splice(i,1); }
-            render();
+    function salvarObjetivo() {
+        const nome = document.getElementById('obj-nome').value;
+        const valor = parseFloat(document.getElementById('obj-valor').value);
+        if(nome && valor) { db.objetivo = { nome, valor }; gravar(); }
+    }
+
+    function gravar() {
+        localStorage.setItem('finanças_v4', JSON.stringify(db));
+        atualizarUI();
+    }
+
+    function atualizarUI() {
+        document.getElementById('renda-input').value = db.renda || "";
+        const total = db.gastos.reduce((s, g) => s + g.valor, 0);
+        const saldo = db.renda - total;
+
+        document.getElementById('txt-gasto').innerText = `R$ ${total.toFixed(2)}`;
+        document.getElementById('txt-saldo').innerText = `R$ ${saldo.toFixed(2)}`;
+
+        const lista = document.getElementById('lista-gastos');
+        lista.innerHTML = db.gastos.slice().reverse().map(g => `
+            <div class="item-row">
+                <div><b>${g.desc}</b><br><small>${g.data}</small></div>
+                <div>
+                    <span style="color:var(--danger)">R$ ${g.valor.toFixed(2)}</span>
+                    <button onclick="excluirGasto(${g.id})" style="border:none; background:none; font-size:1.2rem; cursor:pointer; margin-left:10px">🗑️</button>
+                </div>
+            </div>
+        `).join('');
+
+        if(db.objetivo) {
+            const card = document.getElementById('card-obj');
+            card.style.display = "block";
+            document.getElementById('view-obj-nome').innerText = db.objetivo.nome;
+            const meses = saldo > 0 ? Math.ceil(db.objetivo.valor / saldo) : "∞";
+            document.getElementById('view-obj-previsao').innerText = `Conquista em aproximadamente ${meses} meses.`;
         }
+        renderChart(total, Math.max(0, saldo));
+    }
 
-        function abrirModalObjetivo() { 
-            const n = prompt("NOME DO SONHO:"); 
-            const m = parseFloat(prompt("VALOR META:")); 
-            if(n && m) { db.objetivos.push({nome:n.toUpperCase(), meta:m, atual:0}); render(); } 
-        }
-
-        function abrirConfig() { fecharAbas(); document.getElementById('view-principal').classList.add('hidden'); document.getElementById('view-config').classList.remove('hidden'); }
-        function abrirMentoria() { fecharAbas(); document.getElementById('view-principal').classList.add('hidden'); document.getElementById('view-mentoria').classList.remove('hidden'); }
-        function fecharAbas() { document.getElementById('view-principal').classList.remove('hidden'); document.getElementById('view-config').classList.add('hidden'); document.getElementById('view-mentoria').classList.add('hidden'); window.scrollTo(0,0); }
-        function salvarNome() { db.nome = document.getElementById('input-nome-user').value.toUpperCase(); render(); }
-        function validarSenha() { if(document.getElementById('senha-licenca').value === SENHA_MESTRA) { db.dataCriacao = new Date().getTime(); document.getElementById('tela-licenca').classList.add('hidden'); render(); } else alert("ERRO!"); }
-        function resetaTudo() { if(confirm("APAGAR TUDO?")) { localStorage.clear(); location.reload(); } }
-        function exportarBackup() { navigator.clipboard.writeText(JSON.stringify(db)); alert("COPIADO!"); }
-
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js'); });
-        }
-        render();
-    </script>
+    let chart;
+    function renderChart(g, s) {
+        const ctx = document.getElementById('chartGeral').getContext('2d');
+        if(chart) chart.destroy();
+        chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: { datasets: [{ data: [g, s], backgroundColor: ['#FF4757', '#2ED573'], borderWidth: 0 }] },
+            options: { cutout: '80%', maintainAspectRatio: false }
+        });
+    }
+</script>
 </body>
 </html>
