@@ -1,8 +1,17 @@
 {
   "name": "Finanças Pro",
   "short_name": "Finanças",
+  "description": "Gestão Financeira Pessoal com Segurança",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#003366",
-  "theme_color": "#003366"
+  "theme_color": "#003366",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/584/584026.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
 }
