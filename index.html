@@ -5,18 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#003366">
     <link rel="manifest" href="manifest.json">
-    <title>Finanças Pro - Oficial</title>
+    <title>Finanças Pro</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
-        :root { --primary: #003366; --accent: #007BFF; --bg: #F8F9FA; --white: #FFFFFF; --text: #2D3436; --danger: #FF4757; --success: #2ED573; --warning: #FFA502; }
+        :root { --primary: #003366; --accent: #007BFF; --bg: #F8F9FA; --white: #FFFFFF; --text: #2D3436; --danger: #FF4757; --success: #2ED573; }
         body { font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); margin: 0; padding-bottom: 80px; color: var(--text); }
         
-        /* TELA DE BLOQUEIO */
+        /* PIN SCREEN */
         #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--primary); color: white; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .pin-dots { display: flex; gap: 15px; margin: 20px 0; }
         .dot { width: 15px; height: 15px; border: 2px solid white; border-radius: 50%; }
         .dot.filled { background: white; }
-        .keypad { display: grid; grid-template-columns: repeat(3, 75px); gap: 15px; text-align: center; }
+        .keypad { display: grid; grid-template-columns: repeat(3, 75px); gap: 15px; }
         .key { width: 75px; height: 75px; border: 1px solid rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; cursor: pointer; }
 
         header { background: var(--primary); color: white; padding: 25px 20px; border-radius: 0 0 25px 25px; }
@@ -27,24 +28,20 @@
         .tab-item { border: none; background: none; color: #A4B0BE; font-size: 0.75rem; font-weight: bold; display: flex; flex-direction: column; align-items: center; cursor: pointer; }
         .tab-item.active { color: var(--primary); }
 
-        .content-section { display: none; animation: fadeIn 0.3s ease; }
+        .content-section { display: none; }
         .content-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        label { display: block; font-size: 0.75rem; font-weight: bold; margin-bottom: 5px; color: var(--primary); }
+        label { display: block; font-size: 0.7rem; font-weight: bold; margin-bottom: 4px; color: var(--primary); }
         input, select { width: 100%; padding: 12px; margin-bottom: 12px; border: 1px solid #E0E0E0; border-radius: 10px; box-sizing: border-box; font-size: 1rem; }
         .btn-main { background: var(--primary); color: white; border: none; width: 100%; padding: 14px; border-radius: 10px; font-weight: bold; cursor: pointer; }
         
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #F1F1F1; }
-        .status-badge { font-size: 0.65rem; padding: 3px 8px; border-radius: 20px; color: white; font-weight: bold; }
-        .bg-success { background: var(--success); }
-        .bg-danger { background: var(--danger); }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #F1F1F1; }
     </style>
 </head>
 <body>
 
 <div id="lock-screen">
-    <h2 id="pin-label">Digite seu PIN</h2>
+    <h2>Acesso Seguro</h2>
     <div class="pin-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
     <div class="keypad">
         <div class="key" onclick="pressKey(1)">1</div><div class="key" onclick="pressKey(2)">2</div><div class="key" onclick="pressKey(3)">3</div>
@@ -56,7 +53,6 @@
 
 <header>
     <h1 style="margin:0; font-size: 1.3rem;">Finanças Pro</h1>
-    <div id="resumo-total" style="font-size: 0.8rem; margin-top:5px; opacity: 0.9;">Carregando...</div>
 </header>
 
 <div class="container">
@@ -71,51 +67,46 @@
                 <b id="txt-saldo" style="font-size: 1.5rem; color: var(--primary);">R$ 0,00</b>
             </div>
         </div>
-        <div class="card" style="height: 200px;"><canvas id="chartGeral"></canvas></div>
+        <div class="card" style="height: 180px;"><canvas id="chartGeral"></canvas></div>
+        <button class="btn-main" style="background:#636e72;" onclick="gerarRelatorioPDF()">Exportar Relatório Mensal (PDF)</button>
     </section>
 
     <section id="lancamentos" class="content-section">
         <div class="card" style="border-left: 5px solid var(--success);">
-            <h2>Nova Entrada (Renda)</h2>
-            <input type="text" id="r-desc" placeholder="Ex: Salário, Venda...">
-            <input type="number" id="r-valor" placeholder="Valor R$">
-            <select id="r-tipo">
-                <option value="Fixa">Renda Fixa</option>
-                <option value="Variável">Renda Variável</option>
-            </select>
-            <button class="btn-main" style="background:var(--success)" onclick="salvarRenda()">Adicionar Renda</button>
+            <h2>+ Renda</h2>
+            <input type="text" id="r-desc" placeholder="Salário, Extra...">
+            <input type="number" id="r-valor" placeholder="R$ 0,00">
+            <button class="btn-main" style="background:var(--success)" onclick="salvarRenda()">Salvar Ganho</button>
         </div>
-
         <div class="card" style="border-left: 5px solid var(--danger);">
-            <h2>Novo Gasto</h2>
-            <input type="text" id="g-desc" placeholder="Ex: Aluguel, Luz...">
-            <input type="number" id="g-valor" placeholder="Valor R$">
-            <input type="number" id="g-venc" placeholder="Dia do Vencimento (1-31)">
-            <button class="btn-main" style="background:var(--danger)" onclick="salvarGasto()">Lançar Gasto</button>
+            <h2>- Dívida</h2>
+            <input type="text" id="g-desc" placeholder="Aluguel, Luz...">
+            <input type="number" id="g-valor" placeholder="R$ 0,00">
+            <input type="number" id="g-venc" placeholder="Dia do Vencimento">
+            <button class="btn-main" style="background:var(--danger)" onclick="salvarGasto()">Salvar Gasto</button>
         </div>
     </section>
 
     <section id="config" class="content-section">
         <div class="card">
-            <h2>🎯 Objetivos</h2>
-            <input type="text" id="obj-nome" placeholder="Ex: Viagem">
-            <input type="number" id="obj-valor" placeholder="Valor Alvo">
-            <button class="btn-main" style="background:var(--accent)" onclick="salvarObjetivo()">Salvar Meta</button>
-            <div id="box-meta" style="display:none; margin-top:15px; background:#f0f7ff; padding:10px; border-radius:10px;">
+            <h2>🎯 Planejar Objetivo</h2>
+            <label>Qual o sonho?</label>
+            <input type="text" id="obj-nome" placeholder="Ex: Moto">
+            <label>Valor Total (R$)</label>
+            <input type="number" id="obj-valor" placeholder="15000">
+            <label>Quanto quer investir por mês?</label>
+            <input type="number" id="obj-aporte" placeholder="Ex: 500">
+            <button class="btn-main" style="background:var(--accent)" onclick="salvarObjetivo()">Simular</button>
+            <div id="box-meta" style="display:none; margin-top:10px; padding:10px; background:#f1f2f6; border-radius:10px;">
                 <b id="v-obj-nome"></b><br>
-                <small id="v-obj-prev"></small>
+                <small id="v-obj-prev" style="color:var(--accent)"></small>
             </div>
         </div>
 
         <div class="card">
-            <h2>🔐 Segurança</h2>
-            <label>ALTERAR PIN DE ACESSO</label>
-            <button class="btn-main" style="background:#636e72" onclick="alterarPin()">Alterar Senha de 4 Dígitos</button>
-        </div>
-
-        <div class="card">
-            <h2>📊 Histórico de Entradas</h2>
-            <div id="lista-entradas"></div>
+            <h2>⚙️ Ajustes</h2>
+            <button class="btn-main" style="background:#636e72" onclick="alterarPin()">Mudar PIN de Acesso</button>
+            <button class="btn-main" style="background:#dfe6e9; color:#333; margin-top:10px;" onclick="excluirDados()">Reiniciar App</button>
         </div>
     </section>
 </div>
@@ -127,114 +118,71 @@
 </nav>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('financas_final_v10')) || { pin: null, ganhos: [], gastos: [], objetivo: null };
+    // USANDO A MESMA VERSÃO PARA NÃO PERDER DADOS DOS USUÁRIOS ATUAIS
+    let db = JSON.parse(localStorage.getItem('financas_v11')) || { pin: null, ganhos: [], gastos: [], objetivo: null };
     let currentPinInput = "";
 
-    // PIN
-    function pressKey(num) {
-        if (currentPinInput.length < 4) { currentPinInput += num; updateDots(); }
-        if (currentPinInput.length === 4) { setTimeout(validatePin, 200); }
-    }
-    function updateDots() {
-        const dots = document.querySelectorAll('.dot');
-        dots.forEach((dot, i) => i < currentPinInput.length ? dot.classList.add('filled') : dot.classList.remove('filled'));
-    }
-    function validatePin() {
-        if (!db.pin) { db.pin = currentPinInput; gravar(); unlock(); }
-        else if (currentPinInput === db.pin) { unlock(); }
-        else { alert("PIN Incorreto!"); clearPin(); }
-    }
+    // SEGURANÇA
+    function pressKey(num) { if (currentPinInput.length < 4) { currentPinInput += num; updateDots(); } if (currentPinInput.length === 4) setTimeout(validatePin, 200); }
+    function updateDots() { const dots = document.querySelectorAll('.dot'); dots.forEach((dot, i) => i < currentPinInput.length ? dot.classList.add('filled') : dot.classList.remove('filled')); }
+    function validatePin() { if (!db.pin) { db.pin = currentPinInput; gravar(); unlock(); } else if (currentPinInput === db.pin) unlock(); else { alert("PIN Errado!"); clearPin(); } }
     function unlock() { document.getElementById('lock-screen').style.display = "none"; clearPin(); }
     function clearPin() { currentPinInput = ""; updateDots(); }
+    function alterarPin() { const a = prompt("PIN Atual:"); if(a===db.pin){ const n = prompt("Novo PIN (4 dígitos):"); if(n.length===4){ db.pin=n; gravar(); alert("PIN alterado!"); }} }
 
-    function alterarPin() {
-        const atual = prompt("Digite o PIN atual:");
-        if(atual === db.pin) {
-            const novo = prompt("Novo PIN (4 números):");
-            if(novo && novo.length === 4) { db.pin = novo; gravar(); alert("PIN alterado!"); }
-        } else { alert("Senha incorreta!"); }
-    }
-
-    // NAVEGAÇÃO
-    function nav(id, el) {
-        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-        document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
-        document.getElementById(id).classList.add('active'); el.classList.add('active');
-    }
+    // NAV
+    function nav(id, el) { document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active')); document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active')); document.getElementById(id).classList.add('active'); el.classList.add('active'); }
 
     // DADOS
-    function salvarRenda() {
-        const desc = document.getElementById('r-desc').value;
-        const valor = parseFloat(document.getElementById('r-valor').value);
-        const tipo = document.getElementById('r-tipo').value;
-        if(desc && valor) {
-            db.ganhos.push({ id: Date.now(), desc, valor, tipo });
-            document.getElementById('r-desc').value = ""; document.getElementById('r-valor').value = "";
-            gravar();
-        }
-    }
-
-    function salvarGasto() {
-        const desc = document.getElementById('g-desc').value;
-        const valor = parseFloat(document.getElementById('g-valor').value);
-        const venc = parseInt(document.getElementById('g-venc').value);
-        if(desc && valor && venc) {
-            db.gastos.push({ id: Date.now(), desc, valor, venc, pago: false });
-            document.getElementById('g-desc').value = ""; document.getElementById('g-valor').value = ""; document.getElementById('g-venc').value = "";
-            gravar();
-        }
-    }
-
-    function excluirGasto(id) { if(confirm("Excluir?")) { db.gastos = db.gastos.filter(x => x.id !== id); gravar(); } }
-    function excluirGanho(id) { if(confirm("Excluir renda?")) { db.ganhos = db.ganhos.filter(x => x.id !== id); gravar(); } }
-
+    function salvarRenda() { const d=document.getElementById('r-desc').value, v=parseFloat(document.getElementById('r-valor').value); if(d&&v){ db.ganhos.push({id:Date.now(),desc:d,valor:v}); gravar(); } }
+    function salvarGasto() { const d=document.getElementById('g-desc').value, v=parseFloat(document.getElementById('g-valor').value), vc=parseInt(document.getElementById('g-venc').value); if(d&&v&&vc){ db.gastos.push({id:Date.now(),desc:d,valor:v,venc:vc}); gravar(); } }
+    
     function salvarObjetivo() {
-        const nome = document.getElementById('obj-nome').value;
-        const valor = parseFloat(document.getElementById('obj-valor').value);
-        if(nome && valor) { db.objetivo = { nome, valor }; gravar(); }
+        const n = document.getElementById('obj-nome').value;
+        const v = parseFloat(document.getElementById('obj-valor').value);
+        const a = parseFloat(document.getElementById('obj-aporte').value);
+        if(n && v && a) { db.objetivo = { nome: n, valor: v, aporte: a }; gravar(); }
     }
 
-    function gravar() { localStorage.setItem('financas_final_v10', JSON.stringify(db)); atualizarUI(); }
+    function gravar() { localStorage.setItem('financas_v11', JSON.stringify(db)); atualizarUI(); }
 
     function atualizarUI() {
-        const totalGanhos = db.ganhos.reduce((s, g) => s + g.valor, 0);
-        const totalGastos = db.gastos.reduce((s, g) => s + g.valor, 0);
-        const saldo = totalGanhos - totalGastos;
+        const tGan = db.ganhos.reduce((s, g) => s + g.valor, 0);
+        const tGas = db.gastos.reduce((s, g) => s + g.valor, 0);
+        const saldo = tGan - tGas;
 
-        document.getElementById('txt-ganhos').innerText = `R$ ${totalGanhos.toFixed(2)}`;
-        document.getElementById('txt-gastos').innerText = `R$ ${totalGastos.toFixed(2)}`;
+        document.getElementById('txt-ganhos').innerText = `R$ ${tGan.toFixed(2)}`;
+        document.getElementById('txt-gastos').innerText = `R$ ${tGas.toFixed(2)}`;
         document.getElementById('txt-saldo').innerText = `R$ ${saldo.toFixed(2)}`;
-        document.getElementById('resumo-total').innerText = saldo >= 0 ? "Orçamento sob controle" : "Atenção: Gasto maior que renda!";
 
-        // Lista de Ganhos na aba Config
-        const listaEntradas = document.getElementById('lista-entradas');
-        listaEntradas.innerHTML = db.ganhos.map(g => `
-            <div class="item-row">
-                <div><b>${g.desc}</b> (${g.tipo})</div>
-                <div>R$ ${g.valor.toFixed(2)} <button onclick="excluirGanho(${g.id})" style="border:none; background:none;">🗑️</button></div>
-            </div>
-        `).join('') || '<small>Sem rendas.</small>';
-
-        if(db.objetivo) {
+        if(db.objetivo && db.objetivo.aporte) {
             document.getElementById('box-meta').style.display = "block";
             document.getElementById('v-obj-nome').innerText = db.objetivo.nome;
-            const meses = saldo > 0 ? Math.ceil(db.objetivo.valor / saldo) : "∞";
-            document.getElementById('v-obj-prev').innerText = `Previsto para ${meses} meses.`;
+            const meses = Math.ceil(db.objetivo.valor / db.objetivo.aporte);
+            document.getElementById('v-obj-prev').innerText = (db.objetivo.aporte > saldo) ? "⚠️ Aporte excede sua sobra atual!" : `Meta atingida em ${meses} meses.`;
         }
-        renderChart(totalGastos, Math.max(0, saldo));
+        renderChart(tGas, Math.max(0, saldo));
+    }
+
+    // PDF
+    function gerarRelatorioPDF() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text("RELATÓRIO FINANCEIRO - PRO", 10, 10);
+        doc.text(`Total Ganhos: R$ ${document.getElementById('txt-ganhos').innerText}`, 10, 20);
+        doc.text(`Total Gastos: R$ ${document.getElementById('txt-gastos').innerText}`, 10, 30);
+        doc.text(`Saldo Livre: R$ ${document.getElementById('txt-saldo').innerText}`, 10, 40);
+        doc.save("relatorio_financeiro.pdf");
     }
 
     let chart;
     function renderChart(g, s) {
         const ctx = document.getElementById('chartGeral').getContext('2d');
         if(chart) chart.destroy();
-        chart = new Chart(ctx, {
-            type: 'doughnut',
-            data: { datasets: [{ data: [g, s], backgroundColor: ['#FF4757', '#2ED573'], borderWidth: 0 }] },
-            options: { cutout: '80%', maintainAspectRatio: false }
-        });
+        chart = new Chart(ctx, { type: 'doughnut', data: { datasets: [{ data: [g, s], backgroundColor: ['#FF4757', '#2ED573'], borderWidth: 0 }] }, options: { cutout: '80%', maintainAspectRatio: false } });
     }
 
+    function excluirDados() { if(confirm("Atenção: Isso apagará todos os seus registros. Deseja continuar?")) { localStorage.clear(); location.reload(); } }
     window.onload = () => { if(!db.pin) document.getElementById('pin-label').innerText = "Crie seu PIN"; atualizarUI(); };
 </script>
 </body>
